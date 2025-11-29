@@ -1,0 +1,68 @@
+/* Nav Bar  */
+/* Smooth transitions */
+.nav-hover {
+  position: relative;
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-hover::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: #0d6efd;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-hover:hover::after {
+  width: 100%;
+}
+
+.nav-hover:hover {
+  color: #0d6efd !important;
+}
+
+/* Search Bar Animation */
+.search-bar {
+  transition: all 0.3s ease-in-out;
+}
+
+.search-bar:focus {
+  width: 250px;
+  border-color: #0d6efd;
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.5);
+}
+
+/* Dropdown animation */
+.dropdown-menu {
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Page Not Found  */
+/* Smooth animation for icon */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1.5s infinite;
+}
