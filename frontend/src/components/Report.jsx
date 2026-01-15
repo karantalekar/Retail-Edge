@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import { toast } from "react-toastify";
 const Report = () => {
   const [sales, setSales] = useState([]);
   const [products, setProducts] = useState([]);
@@ -14,6 +15,7 @@ const Report = () => {
 
   // Fetch data
   useEffect(() => {
+    // e.preventDefault();
     const fetchData = async () => {
       try {
         const salesRes = await axios.get("http://localhost:5000/api/sales");
@@ -23,7 +25,7 @@ const Report = () => {
         setSales(salesRes.data);
         setProducts(productsRes.data);
       } catch (error) {
-        console.error("Error fetching report data:", error);
+        toast.error("Error fetching report data:", error);
       }
     };
     fetchData();
@@ -33,7 +35,7 @@ const Report = () => {
   useEffect(() => {
     const veryLowStock = products.filter((p) => p.quantity < 5);
     if (veryLowStock.length > 0) {
-      alert(
+      toast.warning(
         `⚠️ Warning: The following products have stock less than 3!\n` +
           veryLowStock.map((p) => `${p.name} (Stock: ${p.quantity})`).join("\n")
       );
@@ -43,7 +45,7 @@ const Report = () => {
   // Handler for applying a date range
   const handleDateRangeFilter = () => {
     if (!fromDate || !toDate) {
-      alert("Please select both From and To dates!");
+      toast.error("Please select both From and To dates!");
       return;
     }
     setSelectedDate("");
@@ -120,11 +122,13 @@ const Report = () => {
       data.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Key metrics
   const totalSales = filteredSales.reduce(
     (acc, s) => acc + (s.total || s.totalAmount || 0),
     0
   );
+
+  const formattedSales = totalSales.toFixed(2);
+
   const totalProductsSold = filteredSales.reduce(
     (acc, s) => acc + s.items.reduce((iAcc, item) => iAcc + item.quantity, 0),
     0
@@ -171,20 +175,6 @@ const Report = () => {
             Daily
           </button>
 
-          <button
-            className={`btn btn-sm ${
-              timeFilter === "monthly" ? "btn-primary" : "btn-outline-primary"
-            }`}
-            onClick={() => {
-              setTimeFilter("monthly");
-              setSelectedDate("");
-              setFromDate("");
-              setToDate("");
-            }}
-          >
-            Monthly
-          </button>
-
           {/* Single Date */}
 
           {/* FROM DATE */}
@@ -226,7 +216,8 @@ const Report = () => {
           <div className="col-md-4 mb-3">
             <div className="card shadow-sm border-0 text-center p-3">
               <h5>Total Sales</h5>
-              <h3 className="text-success">₹{totalSales}</h3>
+              {/* <h3 className="text-success">₹{totalSales}</h3> */}
+              <h3 className="text-success">₹{formattedSales}</h3>
             </div>
           </div>
 

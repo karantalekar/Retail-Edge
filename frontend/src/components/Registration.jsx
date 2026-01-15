@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import Navbar from "./Navbar";
 
 const Registration = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -11,153 +11,181 @@ const Registration = () => {
     role: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
+  // 🔐 Password Validation
+  const validatePassword = (password) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+    return regex.test(password);
+  };
+
+  // 📝 Handle Input Change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // 🚀 Handle Form Submit
   const handleSubmit = async (e) => {
-    // we have to use async when we use axios
-    e.preventDefault(); // stops that automatic refresh
+    e.preventDefault();
+
+    const { fullName, email, password, role } = formData;
+
+    if (!fullName || !email || !password || !role) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      toast.error(
+        "Password must be 8+ chars and include uppercase, lowercase, number & symbol"
+      );
+      return;
+    }
+
     try {
-      await axios.post("http://localhost:5000/api/register", formData); // await will wait untill request send jabtak request bhejoge nahi tab tak ye wait karega .
-      console.log(formData);
-      alert("Registration Successful ");
+      setLoading(true);
+
+      await axios.post("http://localhost:5000/api/register", formData);
+
+      toast.success("User registered successfully 🎉");
+
       setFormData({
         fullName: "",
         email: "",
         password: "",
         role: "",
       });
-      navigate("/Login"); // redirect to homepage
-      // console.log(formData);
+
+      // optional redirect
+      // navigate("/users");
     } catch (error) {
-      console.log(error);
+      toast.error(error.response?.data?.message || "Registration failed ❌");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div
-      className="container-fluid min-vh-100 d-flex align-items-center justify-content-center"
-      style={{
-        background: "linear-gradient(to right, #e9f0f7, #f5f8fb)",
-        fontFamily: "Poppins, sans-serif",
-      }}
-    >
-      <div className="container p-4">
-        <div className="text-center mb-4">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/1034/1034146.png"
-            width="70"
-            alt="Retail Edge Logo"
-          />
-          <h2 className="mt-2 fw-bold text-primary">
-            Retail Edge Registration
-          </h2>
-        </div>
+    <>
+      <Navbar />
 
-        <div className="row justify-content-center align-items-center">
-          {/* Left Image */}
-          <div className="col-md-5 d-none d-md-block">
+      <div
+        className="container-fluid min-vh-100 d-flex align-items-center justify-content-center mt-4"
+        style={{
+          background: "linear-gradient(to right, #e9f0f7, #f5f8fb)",
+          fontFamily: "Poppins, sans-serif",
+        }}
+      >
+        <div className="container p-4">
+          <div className="text-center mb-4">
             <img
-              src="https://img.freepik.com/free-vector/warehouse-concept-illustration_114360-1151.jpg"
-              alt="Retail Management"
-              className="img-fluid rounded shadow-sm"
+              src="https://cdn-icons-png.flaticon.com/512/1034/1034146.png"
+              width="70"
+              alt="User Icon"
+              // className="mt-1"
             />
+            <h3 className="mt-2 fw-bold text-primary">Add User</h3>
           </div>
 
-          {/* Registration Form */}
-          <div className="col-md-6 col-lg-5">
-            <div className="card shadow-lg border-0 rounded-4">
-              <div className="card-body p-4">
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <label className="form-label">Full Name</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="fullName"
-                      placeholder="Enter your full name"
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+          <div className="row justify-content-center align-items-center">
+            {/* Left Image */}
+            <div className="col-md-5 d-none d-md-block">
+              <img
+                src="https://img.freepik.com/free-vector/warehouse-concept-illustration_114360-1151.jpg"
+                alt="Retail Management"
+                className="img-fluid rounded shadow-sm"
+              />
+            </div>
 
-                  <div className="mb-3">
-                    <label className="form-label">Email Address</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      name="email"
-                      placeholder="Enter your email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+            {/* Registration Form */}
+            <div className="col-md-6 col-lg-5">
+              <div className="card shadow-lg border-0 rounded-4">
+                <div className="card-body p-4">
+                  <form onSubmit={handleSubmit}>
+                    {/* Full Name */}
+                    <div className="mb-3">
+                      <label className="form-label">Full Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="fullName"
+                        placeholder="Enter full name"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                      />
+                    </div>
 
-                  <div className="mb-3">
-                    <label className="form-label">Password</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      name="password"
-                      placeholder="Create a password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+                    {/* Email */}
+                    <div className="mb-3">
+                      <label className="form-label">Email Address</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        name="email"
+                        placeholder="Enter email"
+                        value={formData.email}
+                        onChange={handleChange}
+                      />
+                    </div>
 
-                  <div className="mb-3">
-                    <label className="form-label">Register As</label>
-                    <select
-                      className="form-select"
-                      name="role"
-                      value={formData.role}
-                      onChange={handleChange}
-                      required
+                    {/* Password */}
+                    <div className="mb-1">
+                      <label className="form-label">Password</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        name="password"
+                        placeholder="Create password"
+                        value={formData.password}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    {/* Password Hint */}
+                    <small
+                      className={
+                        formData.password.length === 0
+                          ? "text-muted"
+                          : validatePassword(formData.password)
+                          ? "text-success"
+                          : "text-danger"
+                      }
                     >
-                      <option value="">Select Role</option>
-                      <option value="admin">Admin</option>
-                      <option value="staff">Staff</option>
-                    </select>
-                  </div>
+                      Password must be 8+ chars, include A-Z, a-z, number &
+                      symbol
+                    </small>
 
-                  <button
-                    type="button"
-                    className="btn btn-primary w-100 rounded-pill"
-                    onClick={handleSubmit}
-                  >
-                    Register
-                  </button>
+                    {/* Role */}
+                    <div className="mb-3 mt-3">
+                      <label className="form-label">Register As</label>
+                      <select
+                        className="form-select"
+                        name="role"
+                        value={formData.role}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select Role</option>
+                        <option value="staff">Staff</option>
+                      </select>
+                    </div>
 
-                  {/* <p className="text-center mt-3 mb-0">
-                    Already have an account?{" "}
-                    <a
-                      href="/login"
-                      className="text-decoration-none fw-bold text-primary"
-                    >
-                      Login Here
-                    </a>
-                  </p> */}
-                  <p className="text-center mt-3 mb-0">
-                    Already have an account?{" "}
+                    {/* Submit Button */}
                     <button
-                      onClick={() => navigate("/Login")}
-                      className="btn btn-link text-decoration-none fw-bold text-primary p-0"
-                      style={{ cursor: "pointer" }}
+                      type="submit"
+                      className="btn btn-primary w-100 rounded-pill"
+                      disabled={loading}
                     >
-                      Login Here
+                      {loading ? "Adding..." : "Add User"}
                     </button>
-                  </p>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

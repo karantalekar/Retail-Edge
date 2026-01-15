@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import "../assets/StaffNavbar.css";
-
+import { toast } from "react-toastify";
 const StaffNavbar = () => {
   const navigate = useNavigate();
+  const [staffOpen, setStaffOpen] = useState(false);
 
   const handleLogout = () => {
-    if (window.confirm("Do you want to logout?")) {
+    if (toast.error("do you want to logout ?")) {
       localStorage.removeItem("User");
       localStorage.removeItem("token");
-      alert("Logout Successfully");
+      // alert("Logout Successfully");
+      toast.success("Logout Successfully");
       navigate("/Login");
     }
   };
@@ -54,7 +56,7 @@ const StaffNavbar = () => {
             </li>
 
             {/* User Dropdown */}
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <Link
                 className="nav-link dropdown-toggle d-flex align-items-center"
                 to="#"
@@ -78,6 +80,45 @@ const StaffNavbar = () => {
                     onClick={handleLogout}
                   >
                     <i class="fa-solid fa-right-from-bracket me-2"></i>
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </li> */}
+            <li
+              className="nav-item dropdown"
+              onMouseEnter={() =>
+                window.innerWidth >= 992 && setStaffOpen(true)
+              }
+              onMouseLeave={() =>
+                window.innerWidth >= 992 && setStaffOpen(false)
+              }
+            >
+              <button
+                className="nav-link dropdown-toggle d-flex align-items-center btn btn-link text-white"
+                onClick={() => setStaffOpen(!staffOpen)}
+              >
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                  alt="Staff"
+                  width="35"
+                  height="35"
+                  className="rounded-circle me-2 border border-primary"
+                />
+                Staff
+              </button>
+
+              <ul
+                className={`dropdown-menu dropdown-menu-end shadow-sm ${
+                  staffOpen ? "show" : ""
+                }`}
+              >
+                <li>
+                  <button
+                    className="dropdown-item text-danger fw-semibold"
+                    onClick={handleLogout}
+                  >
+                    <i className="fa-solid fa-right-from-bracket me-2"></i>
                     Logout
                   </button>
                 </li>

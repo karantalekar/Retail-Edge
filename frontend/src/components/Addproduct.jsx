@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
+import { toast } from "react-toastify";
 
 const AddProduct = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const AddProduct = () => {
       const res = await axios.get("http://localhost:5000/api/products");
       setProducts(res.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      toast.error("Error fetching products:", error);
     }
   };
 
@@ -34,7 +35,7 @@ const AddProduct = () => {
     if (products.length === 0) return;
     const veryLowStock = products.filter((p) => p.quantity < 3);
     if (veryLowStock.length > 0) {
-      alert(
+      toast.warning(
         `⚠️ Warning: The following products have very low stock!\n` +
           veryLowStock.map((p) => `${p.name} (Stock: ${p.quantity})`).join("\n")
       );
@@ -87,7 +88,7 @@ const AddProduct = () => {
       setMessage("🗑️ Product deleted successfully!");
       fetchProducts();
     } catch (error) {
-      console.error("Error deleting:", error);
+      toast.error("Error deleting:", error);
       setMessage("❌ Error deleting product");
     }
   };

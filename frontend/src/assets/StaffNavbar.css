@@ -41,3 +41,21 @@
     transform: translateY(0);
   }
 }
+
+.dropdown-menu {
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  visibility: hidden;
+  transition: all 0.25s ease;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+}
+
+/* Remove button default styles */
+.btn-link {
+  text-decoration: none;
+}

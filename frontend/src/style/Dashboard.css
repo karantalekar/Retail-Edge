@@ -1,0 +1,87 @@
+/* Hero Section */
+.hero-section {
+  height: 60vh;
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: url("https://cdn-icons-png.flaticon.com/512/1077/1077063.png")
+    no-repeat center;
+  background-size: cover;
+  opacity: 0.05;
+  animation: slide 20s linear infinite;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Feature Cards */
+.feature-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon Animation */
+.animate-icon {
+  width: 80px;
+  height: 80px;
+  margin: 20px auto 10px;
+  display: block;
+  transition: transform 0.5s;
+}
+.animate-icon:hover {
+  transform: rotate(20deg) scale(1.2);
+}
+
+/* Animate.css fade-in classes */
+.animate__fadeInDown {
+  animation: fadeInDown 1s ease forwards;
+}
+.animate__fadeInUp {
+  animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

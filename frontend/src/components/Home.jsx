@@ -22,7 +22,7 @@ const Home = () => {
 
   useEffect(() => {
     const user = localStorage.getItem("User");
-    if (!user) navigate("/Login");
+    if (!user) navigate("/");
     else fetchData();
   }, [navigate]);
 
@@ -90,7 +90,7 @@ const Home = () => {
         <h2 className="text-center mb-4 fw-semibold">Key Features</h2>
         <div className="row g-4">
           <div className="col-md-4">
-            <div className="card h-100 shadow-sm border-0 text-center p-3 hover-shadow">
+            <div className="card h-100 shadow-sm border-0 text-center p-3 card-hover">
               <img
                 src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
                 alt="Product Management"
@@ -107,7 +107,7 @@ const Home = () => {
           </div>
 
           <div className="col-md-4">
-            <div className="card h-100 shadow-sm border-0 text-center p-3 hover-shadow">
+            <div className="card h-100 shadow-sm border-0 text-center p-3 card-hover">
               <img
                 src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                 alt="Staff Access"
@@ -126,7 +126,7 @@ const Home = () => {
           </div>
 
           <div className="col-md-4">
-            <div className="card h-100 shadow-sm border-0 text-center p-3 hover-shadow">
+            <div className="card h-100 shadow-sm border-0 text-center p-3 card-hover">
               <img
                 src="https://cdn-icons-png.flaticon.com/512/1170/1170576.png"
                 alt="Billing"
@@ -150,30 +150,6 @@ const Home = () => {
           Real-Time Sales Analytics
         </h2>
         <div className="row g-4">
-          {/* Daily Sales Chart */}
-          {/* <div className="col-md-6">
-            <div className="card shadow-sm p-3 border-0 h-100">
-              <h5 className="text-center text-primary fw-bold mb-3">
-                Daily Sales Overview
-              </h5>
-              <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={dailySales}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="total"
-                    stroke="#0d6efd"
-                    strokeWidth={3}
-                    dot={{ r: 3 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div> */}
-
           {/* Product Stock Chart */}
           <div className="col-me-6">
             <div className="card shadow-sm p-3 border-0 h-100">
@@ -197,7 +173,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-
         {/* Summary Cards */}
         <div className="row text-center mt-5">
           <div className="col-md-4 mb-3">
@@ -225,11 +200,11 @@ const Home = () => {
       </section>
 
       {/* Footer */}
-      <footer className="text-center py-3 bg-dark text-white mt-5">
+      {/* <footer className="text-center py-3 bg-dark text-white mt-5">
         <p className="mb-0">
           © {new Date().getFullYear()} Retail Edge. All rights reserved.
         </p>
-      </footer>
+      </footer> */}
     </div>
   );
 };
