@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -10,7 +10,11 @@ const Login = () => {
     email: "",
     password: "",
   });
-
+  
+  useEffect(() => {
+    setFormData({ email: "", password: "" });
+  }, []);
+  
   const navigate = useNavigate();
 
   const handleChange = (e) => {
