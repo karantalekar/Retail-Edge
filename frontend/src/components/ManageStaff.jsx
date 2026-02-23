@@ -10,7 +10,9 @@ const ManageStaff = () => {
   // Fetch staff from backend
   const fetchStaffList = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/staff");
+      const res = await axios.get(
+        "https://retail-edge-plw7.onrender.com/staff",
+      );
       setStaffList(res.data);
     } catch (error) {
       toast.error("Error fetching staff list");
@@ -62,7 +64,7 @@ const ManageStaff = () => {
   const filteredStaff = staffList.filter(
     (staff) =>
       staff.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      staff.email.toLowerCase().includes(searchTerm.toLowerCase())
+      staff.email.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (

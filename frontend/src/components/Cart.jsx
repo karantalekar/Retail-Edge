@@ -19,7 +19,8 @@ const Cart = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        // const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get("https://retail-edge-plw7.onrender.com/products");
         setProducts(res.data || []);
       } catch {
         toast.error("Failed to load products");

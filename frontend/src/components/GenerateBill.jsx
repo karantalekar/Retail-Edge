@@ -19,7 +19,7 @@ const GenerateBill = () => {
 
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
-    0
+    0,
   );
   const tax = (subtotal - discount) * taxRate;
   const total = subtotal - discount + tax;
@@ -99,7 +99,7 @@ const GenerateBill = () => {
 
     const subtotal = cart.reduce(
       (acc, item) => acc + item.price * item.quantity,
-      0
+      0,
     );
     const tax = (subtotal - discount) * taxRate;
     const total = subtotal - discount + tax;
@@ -135,7 +135,10 @@ const GenerateBill = () => {
         taxRate,
       };
 
-      const res = await axios.post("http://localhost:5000/api/bills", billData);
+      const res = await axios.post(
+        "https://retail-edge-plw7.onrender.com/bills",
+        billData,
+      );
       toast.success("Bill saved successfully!");
       console.log(res.data);
     } catch (err) {
@@ -249,7 +252,3 @@ const GenerateBill = () => {
 };
 
 export default GenerateBill;
-
-
-
-

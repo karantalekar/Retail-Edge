@@ -13,12 +13,15 @@ const StaffDashboard = () => {
     const fetchData = async () => {
       try {
         const [prodRes, salesRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/products"),
-          axios.get("http://localhost:5000/api/sales"),
+          axios.get("https://retail-edge-plw7.onrender.com/products"),
+          axios.get("https://retail-edge-plw7.onrender.com/sales"),
         ]);
         setProducts(prodRes.data || []);
         setSales(salesRes.data || []);
-        const revenue = salesRes.data.reduce((sum, s) => sum + (s.total || 0), 0);
+        const revenue = salesRes.data.reduce(
+          (sum, s) => sum + (s.total || 0),
+          0,
+        );
         setTotalRevenue(revenue);
       } catch (err) {
         console.error(err);
@@ -28,17 +31,24 @@ const StaffDashboard = () => {
   }, []);
 
   return (
-    <div style={{ background: "#f0f2f8", minHeight: "100vh", fontFamily: "'Segoe UI', sans-serif" }}>
+    <div
+      style={{
+        background: "#f0f2f8",
+        minHeight: "100vh",
+        fontFamily: "'Segoe UI', sans-serif",
+      }}
+    >
       <StaffNavbar />
 
       <div className="container py-5">
-
         {/* Header */}
         <div className="text-center mb-5 animate__animated animate__fadeInDown">
-          <h1 className="fw-bold" style={{ color: "#0dcaf0" }}>Welcome to Retail Edge 💎</h1>
+          <h1 className="fw-bold" style={{ color: "#0dcaf0" }}>
+            Welcome to Retail Edge 💎
+          </h1>
           <p className="text-muted fs-5">
-            A smart billing & inventory system designed to streamline daily operations
-            with efficiency and elegance.
+            A smart billing & inventory system designed to streamline daily
+            operations with efficiency and elegance.
           </p>
         </div>
 
@@ -59,7 +69,9 @@ const StaffDashboard = () => {
           <div className="col-md-4 mb-3 animate__animated animate__fadeInUp animate__delay-2s">
             <div className="glass-card p-4 shadow-sm text-center">
               <h6 className="text-danger fw-bold">Total Revenue</h6>
-              <p className="fs-3 fw-semibold">₹{totalRevenue.toLocaleString()}</p>
+              <p className="fs-3 fw-semibold">
+                ₹{totalRevenue.toLocaleString()}
+              </p>
             </div>
           </div>
         </div>
@@ -99,8 +111,9 @@ const StaffDashboard = () => {
           <div className="col-md-6 order-md-1 animate__animated animate__fadeInLeft">
             <h3 className="fw-bold text-secondary mb-3">Get Started Quickly</h3>
             <p className="fs-5 text-muted">
-              Staff can easily add products to cart, generate bills, and help customers
-              without complicated steps. Retail Edge ensures smooth operations with minimal effort.
+              Staff can easily add products to cart, generate bills, and help
+              customers without complicated steps. Retail Edge ensures smooth
+              operations with minimal effort.
             </p>
           </div>
         </div>
@@ -111,7 +124,6 @@ const StaffDashboard = () => {
             &copy; {new Date().getFullYear()} Retail Edge. All rights reserved.
           </p>
         </div>
-
       </div>
 
       {/* Styles */}

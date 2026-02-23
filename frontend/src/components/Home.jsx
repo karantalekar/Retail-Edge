@@ -27,8 +27,8 @@ const Home = () => {
   const fetchData = async () => {
     try {
       const [salesRes, productRes] = await Promise.all([
-        axios.get("http://localhost:5000/api/sales"),
-        axios.get("http://localhost:5000/api/products"),
+        axios.get("https://retail-edge-plw7.onrender.com/sales"),
+        axios.get("https://retail-edge-plw7.onrender.com/products"),
       ]);
 
       setSales(salesRes.data);
@@ -154,9 +154,7 @@ const Home = () => {
 
       {/* Chart */}
       <section className="container my-5">
-        <h2 className="text-center fw-bold mb-4">
-          Real-Time Stock Analytics
-        </h2>
+        <h2 className="text-center fw-bold mb-4">Real-Time Stock Analytics</h2>
 
         <div className="card chart-card shadow p-4">
           <ResponsiveContainer width="100%" height={280}>

@@ -51,7 +51,7 @@ const LowStockAlert = () => {
     const fetchLowStock = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/products/low-stock"
+          "https://retail-edge-plw7.onrender.com/products/low-stock",
         );
 
         setLowStock(res.data);
@@ -64,12 +64,12 @@ const LowStockAlert = () => {
               autoClose: 5000, // 5 seconds
               pauseOnHover: true,
               closeOnClick: true,
-            }
+            },
           );
         });
       } catch (error) {
         toast.error(
-          error.response?.data?.message || "Failed to fetch low stock"
+          error.response?.data?.message || "Failed to fetch low stock",
         );
       }
     };

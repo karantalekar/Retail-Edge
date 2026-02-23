@@ -28,10 +28,13 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "https://retail-edge-plw7.onrender.com/login",
+        {
+          email,
+          password,
+        },
+      );
 
       localStorage.setItem("token", res.data.token);
       const decoded = jwtDecode(res.data.token);
@@ -48,7 +51,7 @@ const Login = () => {
       }
     } catch (err) {
       toast.error(
-        err.response?.data?.message || "Login failed. Please try again."
+        err.response?.data?.message || "Login failed. Please try again.",
       );
     }
   };
@@ -176,9 +179,7 @@ const Login = () => {
                   </div>
 
                   <div className="mb-4">
-                    <label className="form-label fw-semibold">
-                      Password
-                    </label>
+                    <label className="form-label fw-semibold">Password</label>
                     <input
                       type="password"
                       className="form-control"

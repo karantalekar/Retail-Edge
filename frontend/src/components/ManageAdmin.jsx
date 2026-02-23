@@ -15,9 +15,12 @@ const ManageAdmin = () => {
     const fetchAdmin = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://retail-edge-plw7.onrender.com/me",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
 
         setAdmin({
           fullname: res.data.fullname,
@@ -45,13 +48,13 @@ const ManageAdmin = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        "http://localhost:5000/api/me",
+        "https://retail-edge-plw7.onrender.com/me",
         {
           fullname: admin.fullname,
           email: admin.email,
           ...(newPassword && { password: newPassword }),
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       toast.success("Profile updated successfully ✨");

@@ -34,10 +34,15 @@ const Report = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const salesRes = await axios.get("http://localhost:5000/api/sales", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const productsRes = await axios.get("http://localhost:5000/api/products");
+        const salesRes = await axios.get(
+          "https://retail-edge-plw7.onrender.com/sales",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        const productsRes = await axios.get(
+          "https://retail-edge-plw7.onrender.com/products",
+        );
         setSales(salesRes.data);
         setProducts(productsRes.data);
       } catch (error) {
@@ -53,7 +58,9 @@ const Report = () => {
     if (veryLowStock.length > 0) {
       toast.warning(
         `⚠️ Warning: The following products have stock less than 5!\n` +
-          veryLowStock.map((p) => `${p.name} (Stock: ${p.quantity})`).join("\n")
+          veryLowStock
+            .map((p) => `${p.name} (Stock: ${p.quantity})`)
+            .join("\n"),
       );
     }
   }, [products]);
@@ -117,7 +124,8 @@ const Report = () => {
     .filter((sale) => sale.staff && sale.staff.role === "staff")
     .forEach((sale) => {
       const staffName = sale.staff.fullname;
-      staffWiseSales[staffName] = (staffWiseSales[staffName] || 0) + (sale.total || 0);
+      staffWiseSales[staffName] =
+        (staffWiseSales[staffName] || 0) + (sale.total || 0);
     });
 
   const staffSalesArray = Object.entries(staffWiseSales)
@@ -125,10 +133,12 @@ const Report = () => {
     .sort((a, b) => b.total - a.total);
 
   // Pie chart data
-  const productPieData = Object.entries(productWiseSales).map(([name, data]) => ({
-    name,
-    value: data.revenue,
-  }));
+  const productPieData = Object.entries(productWiseSales).map(
+    ([name, data]) => ({
+      name,
+      value: data.revenue,
+    }),
+  );
 
   const staffPieData = staffSalesArray.map((s) => ({
     name: s.name,
@@ -136,10 +146,12 @@ const Report = () => {
   }));
 
   // Total metrics
-  const totalRevenue = filteredSales.reduce((acc, s) => acc + (s.total || 0), 0).toFixed(2);
+  const totalRevenue = filteredSales
+    .reduce((acc, s) => acc + (s.total || 0), 0)
+    .toFixed(2);
   const totalProductsSold = filteredSales.reduce(
     (acc, s) => acc + s.items.reduce((iAcc, item) => iAcc + item.quantity, 0),
-    0
+    0,
   );
   const totalSales = filteredSales.length;
 
@@ -153,15 +165,24 @@ const Report = () => {
 
         {/* ---------- KPI CARDS ---------- */}
         <div className="d-flex flex-wrap justify-content-center mb-4 gap-3">
-          <div className="card shadow-sm border-0 p-3 text-center" style={{ width: "180px", borderRadius: "1rem" }}>
+          <div
+            className="card shadow-sm border-0 p-3 text-center"
+            style={{ width: "180px", borderRadius: "1rem" }}
+          >
             <h6 className="text-muted">Total Sales</h6>
             <h4 className="fw-bold">{totalSales}</h4>
           </div>
-          <div className="card shadow-sm border-0 p-3 text-center" style={{ width: "180px", borderRadius: "1rem" }}>
+          <div
+            className="card shadow-sm border-0 p-3 text-center"
+            style={{ width: "180px", borderRadius: "1rem" }}
+          >
             <h6 className="text-muted">Total Products Sold</h6>
             <h4 className="fw-bold">{totalProductsSold}</h4>
           </div>
-          <div className="card shadow-sm border-0 p-3 text-center" style={{ width: "180px", borderRadius: "1rem" }}>
+          <div
+            className="card shadow-sm border-0 p-3 text-center"
+            style={{ width: "180px", borderRadius: "1rem" }}
+          >
             <h6 className="text-muted">Total Revenue (₹)</h6>
             <h4 className="fw-bold">₹{totalRevenue}</h4>
           </div>
@@ -203,7 +224,10 @@ const Report = () => {
             value={toDate}
             onChange={(e) => setToDate(e.target.value)}
           />
-          <button onClick={handleDateRangeFilter} className="btn btn-sm btn-success">
+          <button
+            onClick={handleDateRangeFilter}
+            className="btn btn-sm btn-success"
+          >
             Apply Range
           </button>
         </div>
@@ -211,8 +235,13 @@ const Report = () => {
         {/* ---------- PIE CHARTS ---------- */}
         <div className="row mb-5">
           <div className="col-md-6 mb-4">
-            <div className="card shadow-lg border-0 p-3" style={{ borderRadius: "1rem" }}>
-              <h5 className="text-center mb-3 fw-bold">📦 Product Revenue Distribution</h5>
+            <div
+              className="card shadow-lg border-0 p-3"
+              style={{ borderRadius: "1rem" }}
+            >
+              <h5 className="text-center mb-3 fw-bold">
+                📦 Product Revenue Distribution
+              </h5>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -224,7 +253,9 @@ const Report = () => {
                     outerRadius={100}
                     innerRadius={50}
                     paddingAngle={5}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) =>
+                      `${name} ${(percent * 100).toFixed(0)}%`
+                    }
                     isAnimationActive
                   >
                     {productPieData.map((entry, index) => (
@@ -236,7 +267,9 @@ const Report = () => {
                       />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => `₹${value.toLocaleString()}`} />
+                  <Tooltip
+                    formatter={(value) => `₹${value.toLocaleString()}`}
+                  />
                   <Legend verticalAlign="bottom" height={36} />
                 </PieChart>
               </ResponsiveContainer>
@@ -244,8 +277,13 @@ const Report = () => {
           </div>
 
           <div className="col-md-6 mb-4">
-            <div className="card shadow-lg border-0 p-3" style={{ borderRadius: "1rem" }}>
-              <h5 className="text-center mb-3 fw-bold">🧑‍💼 Staff Sales Distribution</h5>
+            <div
+              className="card shadow-lg border-0 p-3"
+              style={{ borderRadius: "1rem" }}
+            >
+              <h5 className="text-center mb-3 fw-bold">
+                🧑‍💼 Staff Sales Distribution
+              </h5>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -257,7 +295,9 @@ const Report = () => {
                     outerRadius={100}
                     innerRadius={50}
                     paddingAngle={5}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) =>
+                      `${name} ${(percent * 100).toFixed(0)}%`
+                    }
                     isAnimationActive
                   >
                     {staffPieData.map((entry, index) => (
@@ -269,7 +309,9 @@ const Report = () => {
                       />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => `₹${value.toLocaleString()}`} />
+                  <Tooltip
+                    formatter={(value) => `₹${value.toLocaleString()}`}
+                  />
                   <Legend verticalAlign="bottom" height={36} />
                 </PieChart>
               </ResponsiveContainer>

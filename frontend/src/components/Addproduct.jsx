@@ -16,7 +16,9 @@ const AddProduct = () => {
   // Fetch products
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get(
+        "https://retail-edge-plw7.onrender.com/products",
+      );
       setProducts(res.data);
     } catch {
       toast.error("Failed to load products");
@@ -35,7 +37,7 @@ const AddProduct = () => {
     if (lowStock.length > 0) {
       toast.warning(
         "⚠️ Low stock alert:\n" +
-          lowStock.map((p) => `${p.name} (${p.quantity})`).join("\n")
+          lowStock.map((p) => `${p.name} (${p.quantity})`).join("\n"),
       );
     }
   }, [products]);
@@ -56,7 +58,7 @@ const AddProduct = () => {
       if (editingProduct) {
         await axios.put(
           `http://localhost:5000/api/products/${editingProduct._id}`,
-          payload
+          payload,
         );
         toast.success("Product updated successfully");
       } else {
@@ -194,8 +196,8 @@ const AddProduct = () => {
                           p.quantity < 3
                             ? "bg-danger"
                             : p.quantity < 10
-                            ? "bg-warning text-dark"
-                            : "bg-success"
+                              ? "bg-warning text-dark"
+                              : "bg-success"
                         }`}
                       >
                         {p.quantity}
