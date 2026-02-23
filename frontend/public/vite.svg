@@ -1,0 +1,11 @@
+<svg width="60" height="60" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bag Body -->
+  <rect x="12" y="16" width="40" height="40" rx="6" fill="#1D4ED8"></rect>
+  
+  <!-- Bag Handles -->
+  <path d="M20 16 C20 8, 44 8, 44 16" stroke="white" stroke-width="3" fill="none"></path>
+  
+  <!-- Decoration Dots -->
+  <circle cx="24" cy="36" r="2" fill="white"></circle>
+  <circle cx="40" cy="36" r="2" fill="white"></circle>
+</svg>

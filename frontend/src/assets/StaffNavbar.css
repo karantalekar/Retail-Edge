@@ -1,0 +1,61 @@
+/* Underline Hover Effect for nav items */
+.nav-hover {
+  position: relative;
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: color 0.3s ease-in-out;
+  padding-bottom: 3px;
+}
+
+.nav-hover::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: #0d6efd;
+  transition: width 0.3s ease-in-out;
+}
+
+.nav-hover:hover::after {
+  width: 100%;
+}
+
+.nav-hover:hover {
+  color: #0d6efd !important;
+}
+
+/* Fade-in dropdown */
+.dropdown-menu {
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-menu {
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  visibility: hidden;
+  transition: all 0.25s ease;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+}
+
+/* Remove button default styles */
+.btn-link {
+  text-decoration: none;
+}

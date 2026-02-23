@@ -1,0 +1,41 @@
+/* Base dropdown hidden state */
+.navbar .dropdown-menu {
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+}
+
+/* When dropdown is open */
+.navbar .dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Optional: smooth hover feel */
+.nav-item.dropdown > .nav-link,
+.nav-item.dropdown > button {
+  transition: color 0.2s ease;
+}
+
+/* Hover color */
+.nav-item.dropdown:hover > button,
+.nav-item.dropdown:hover > .nav-link {
+  color: #0d6efd;
+}
+
+/* Drop shadow enhancement */
+.dropdown-menu {
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile fix: disable animation delay */
+@media (max-width: 991px) {
+  .navbar .dropdown-menu {
+    transition: none;
+  }
+}

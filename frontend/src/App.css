@@ -1,0 +1,9 @@
+/* Add a subtle shadow and scale on hover for feature cards */
+.feature-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.feature-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+  z-index: 2;
+}
