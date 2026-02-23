@@ -14,11 +14,22 @@ const Navbar = () => {
       localStorage.clear();
       localStorage.removeItem("token");
       localStorage.removeItem("User");
+      clearCookies();
       toast.success("Logout Successfully");
       navigate("/Login");
     }
   };
 
+    const clearCookies = () => {
+      document.cookie
+      .split(";")
+      .forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
+      });
+  };
+  
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
       <div className="container-fluid px-4">
