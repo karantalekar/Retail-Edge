@@ -12,6 +12,8 @@ const Navbar = () => {
   const handleLogout = () => {
     if (window.confirm("Do you want to logout?")) {
       localStorage.clear();
+      localStorage.removeItem("token");
+      localStorage.removeItem("User");
       toast.success("Logout Successfully");
       navigate("/Login");
     }
