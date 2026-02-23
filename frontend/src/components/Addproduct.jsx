@@ -17,7 +17,7 @@ const AddProduct = () => {
   const fetchProducts = async () => {
     try {
       const res = await axios.get(
-        "https://retail-edge-plw7.onrender.com/products",
+        "https://retail-edge-plw7.onrender.com/api/products",
       );
       setProducts(res.data);
     } catch {
@@ -57,12 +57,15 @@ const AddProduct = () => {
     try {
       if (editingProduct) {
         await axios.put(
-          `http://localhost:5000/api/products/${editingProduct._id}`,
+          `https://retail-edge-plw7.onrender.com/api/products/${editingProduct._id}`,
           payload,
         );
         toast.success("Product updated successfully");
       } else {
-        await axios.post("http://localhost:5000/api/products", payload);
+        await axios.post(
+          "https://retail-edge-plw7.onrender.com/api/products",
+          payload,
+        );
         toast.success("Product added successfully");
       }
 
@@ -83,7 +86,9 @@ const AddProduct = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product permanently?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(
+        `https://retail-edge-plw7.onrender.com/api/products/${id}`,
+      );
       toast.success("Product deleted");
       fetchProducts();
     } catch {

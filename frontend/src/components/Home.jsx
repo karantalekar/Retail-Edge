@@ -27,8 +27,8 @@ const Home = () => {
   const fetchData = async () => {
     try {
       const [salesRes, productRes] = await Promise.all([
-        axios.get("https://retail-edge-plw7.onrender.com/sales"),
-        axios.get("https://retail-edge-plw7.onrender.com/products"),
+        axios.get("https://retail-edge-plw7.onrender.com/api/sales"),
+        axios.get("https://retail-edge-plw7.onrender.com/api/products"),
       ]);
 
       setSales(salesRes.data);

@@ -20,7 +20,9 @@ const Cart = () => {
     const fetchProducts = async () => {
       try {
         // const res = await axios.get("http://localhost:5000/api/products");
-        const res = await axios.get("https://retail-edge-plw7.onrender.com/products");
+        const res = await axios.get(
+          "https://retail-edge-plw7.onrender.com/api/products",
+        );
         setProducts(res.data || []);
       } catch {
         toast.error("Failed to load products");
@@ -48,17 +50,18 @@ const Cart = () => {
           const newQty = existing.quantity + quantity;
           if (newQty > product.quantity) return prev;
           return prev.map((i) =>
-            i.productId === productId ? { ...i, quantity: newQty } : i
+            i.productId === productId ? { ...i, quantity: newQty } : i,
           );
         }
         return [...prev, { productId, quantity }];
       });
       setProductQtys((prev) => ({ ...prev, [productId]: "" }));
     },
-    [products]
+    [products],
   );
 
-  const removeFromCart = (id) => setCart(cart.filter((item) => item.productId !== id));
+  const removeFromCart = (id) =>
+    setCart(cart.filter((item) => item.productId !== id));
 
   // Calculations
   const subtotal = cart.reduce((sum, item) => {
@@ -79,7 +82,7 @@ const Cart = () => {
       const token = localStorage.getItem("token");
       if (!token) return toast.error("Login required");
       await axios.post(
-        "http://localhost:5000/api/sales",
+        "https://retail-edge-plw7.onrender.com/api/sales",
         {
           customer,
           items: cart,
@@ -91,13 +94,15 @@ const Cart = () => {
           total,
           date: new Date(),
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       toast.success("Bill processed successfully");
       setCart([]);
       setCustomer({ name: "", email: "", phone: "" });
       setProductQtys({});
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get(
+        "https://retail-edge-plw7.onrender.com/api/products",
+      );
       setProducts(res.data);
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to process bill.");
@@ -117,7 +122,7 @@ const Cart = () => {
 
   // Filter products by search
   const filteredProducts = products.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
+    p.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   if (loading)
@@ -134,25 +139,50 @@ const Cart = () => {
     <>
       <StaffNavbar />
       <div className="container-fluid mt-4">
-
         {/* Customer */}
         <div className="card mb-4 glass p-4 animate__animated animate__fadeInUp">
           <div className="row g-3">
             <div className="col-md-4">
-              <input className="form-control" placeholder="Name *" value={customer.name} onChange={e => setCustomer({ ...customer, name: e.target.value })} />
+              <input
+                className="form-control"
+                placeholder="Name *"
+                value={customer.name}
+                onChange={(e) =>
+                  setCustomer({ ...customer, name: e.target.value })
+                }
+              />
             </div>
             <div className="col-md-4">
-              <input className="form-control" placeholder="Email" value={customer.email} onChange={e => setCustomer({ ...customer, email: e.target.value })} />
+              <input
+                className="form-control"
+                placeholder="Email"
+                value={customer.email}
+                onChange={(e) =>
+                  setCustomer({ ...customer, email: e.target.value })
+                }
+              />
             </div>
             <div className="col-md-4">
-              <input className="form-control" placeholder="Phone" value={customer.phone} onChange={e => setCustomer({ ...customer, phone: e.target.value })} />
+              <input
+                className="form-control"
+                placeholder="Phone"
+                value={customer.phone}
+                onChange={(e) =>
+                  setCustomer({ ...customer, phone: e.target.value })
+                }
+              />
             </div>
           </div>
         </div>
 
         {/* Search */}
         <div className="mb-3">
-          <input className="form-control glass" placeholder="Search product..." value={search} onChange={(e) => setSearch(e.target.value)} />
+          <input
+            className="form-control glass"
+            placeholder="Search product..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
 
         {/* Products */}
@@ -160,7 +190,14 @@ const Cart = () => {
           <div className="table-responsive">
             <table className="table table-hover">
               <thead className="table-dark">
-                <tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Qty</th><th></th></tr>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Qty</th>
+                  <th></th>
+                </tr>
               </thead>
               <tbody>
                 {filteredProducts.map((p) => (
@@ -168,9 +205,33 @@ const Cart = () => {
                     <td>{p.name}</td>
                     <td>{p.category}</td>
                     <td>₹{p.price}</td>
-                    <td className={p.quantity < 5 ? "text-danger fw-bold" : ""}>{p.quantity}</td>
-                    <td><input type="number" className="form-control form-control-sm" value={productQtys[p._id] || ""} min="1" onChange={e => setProductQtys({ ...productQtys, [p._id]: e.target.value })} /></td>
-                    <td><button className="btn btn-sm btn-gradient" onClick={() => addToCart(p._id, productQtys[p._id] || 1)}>Add</button></td>
+                    <td className={p.quantity < 5 ? "text-danger fw-bold" : ""}>
+                      {p.quantity}
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        className="form-control form-control-sm"
+                        value={productQtys[p._id] || ""}
+                        min="1"
+                        onChange={(e) =>
+                          setProductQtys({
+                            ...productQtys,
+                            [p._id]: e.target.value,
+                          })
+                        }
+                      />
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-sm btn-gradient"
+                        onClick={() =>
+                          addToCart(p._id, productQtys[p._id] || 1)
+                        }
+                      >
+                        Add
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -182,26 +243,47 @@ const Cart = () => {
         <div className="card mb-4 glass p-4 sticky-top animate__animated animate__fadeInUp">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <strong>Cart</strong>
-            <button className="btn btn-success btn-gradient" onClick={processBill}>Process ₹{total.toFixed(2)}</button>
+            <button
+              className="btn btn-success btn-gradient"
+              onClick={processBill}
+            >
+              Process ₹{total.toFixed(2)}
+            </button>
           </div>
-          {cart.length === 0 ? <p className="text-muted">Cart is empty</p> :
+          {cart.length === 0 ? (
+            <p className="text-muted">Cart is empty</p>
+          ) : (
             <table className="table table-sm">
-              <thead><tr><th>Product</th><th>Qty</th><th>Total</th><th></th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Qty</th>
+                  <th>Total</th>
+                  <th></th>
+                </tr>
+              </thead>
               <tbody>
-                {cart.map(item => {
-                  const p = products.find(pr => pr._id === item.productId);
+                {cart.map((item) => {
+                  const p = products.find((pr) => pr._id === item.productId);
                   return (
                     <tr key={item.productId}>
                       <td>{p?.name}</td>
                       <td>{item.quantity}</td>
                       <td>₹{(p?.price * item.quantity).toFixed(2)}</td>
-                      <td><button className="btn btn-danger btn-sm" onClick={() => removeFromCart(item.productId)}>×</button></td>
+                      <td>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => removeFromCart(item.productId)}
+                        >
+                          ×
+                        </button>
+                      </td>
                     </tr>
-                  )
+                  );
                 })}
               </tbody>
             </table>
-          }
+          )}
         </div>
 
         {/* Invoice */}
@@ -209,40 +291,87 @@ const Cart = () => {
           <div className="card glass p-4 animate__animated animate__fadeInUp">
             <div className="d-flex justify-content-between mb-3">
               <h5>Invoice Preview</h5>
-              <button className="btn btn-success btn-gradient" onClick={generatePDF}>📄 Download PDF</button>
+              <button
+                className="btn btn-success btn-gradient"
+                onClick={generatePDF}
+              >
+                📄 Download PDF
+              </button>
             </div>
             <div id="invoice" className="border p-3 bg-white">
-              <div className="text-center mb-3"><h2>🛒 Retail Edge</h2><p>Invoice #{Date.now().toString().slice(-6)}</p></div>
-              <div><strong>Customer:</strong> {customer.name || "Walk-in"}<br />
-                {customer.phone && <><strong>Phone:</strong> {customer.phone}<br /></>}
-                {customer.email && <><strong>Email:</strong> {customer.email}</>}
+              <div className="text-center mb-3">
+                <h2>🛒 Retail Edge</h2>
+                <p>Invoice #{Date.now().toString().slice(-6)}</p>
+              </div>
+              <div>
+                <strong>Customer:</strong> {customer.name || "Walk-in"}
+                <br />
+                {customer.phone && (
+                  <>
+                    <strong>Phone:</strong> {customer.phone}
+                    <br />
+                  </>
+                )}
+                {customer.email && (
+                  <>
+                    <strong>Email:</strong> {customer.email}
+                  </>
+                )}
               </div>
               <div className="table-responsive my-2">
                 <table className="table table-sm table-borderless">
-                  <thead><tr><th>Product</th><th className="text-end">Qty</th><th className="text-end">Price</th><th className="text-end">Total</th></tr></thead>
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th className="text-end">Qty</th>
+                      <th className="text-end">Price</th>
+                      <th className="text-end">Total</th>
+                    </tr>
+                  </thead>
                   <tbody>
-                    {cart.map(item => {
-                      const product = products.find(p => p._id === item.productId);
-                      return (<tr key={item.productId}>
-                        <td>{product?.name}</td>
-                        <td className="text-end">{item.quantity}</td>
-                        <td className="text-end">₹{product?.price.toFixed(2)}</td>
-                        <td className="text-end fw-bold">₹{(product?.price * item.quantity).toFixed(2)}</td>
-                      </tr>)
+                    {cart.map((item) => {
+                      const product = products.find(
+                        (p) => p._id === item.productId,
+                      );
+                      return (
+                        <tr key={item.productId}>
+                          <td>{product?.name}</td>
+                          <td className="text-end">{item.quantity}</td>
+                          <td className="text-end">
+                            ₹{product?.price.toFixed(2)}
+                          </td>
+                          <td className="text-end fw-bold">
+                            ₹{(product?.price * item.quantity).toFixed(2)}
+                          </td>
+                        </tr>
+                      );
                     })}
                   </tbody>
                 </table>
               </div>
               <div className="text-end">
-                <div className="d-flex justify-content-between"><span>Subtotal:</span><span>₹{subtotal.toFixed(2)}</span></div>
-                {discountRate > 0 && <div className="d-flex justify-content-between text-success"><span>Auto Discount (5%)</span><span>-₹{discountAmount.toFixed(2)}</span></div>}
-                <div className="d-flex justify-content-between"><span>Tax ({taxRate}%)</span><span>+₹{taxAmount.toFixed(2)}</span></div>
-                <div className="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span>₹{total.toFixed(2)}</span></div>
+                <div className="d-flex justify-content-between">
+                  <span>Subtotal:</span>
+                  <span>₹{subtotal.toFixed(2)}</span>
+                </div>
+                {discountRate > 0 && (
+                  <div className="d-flex justify-content-between text-success">
+                    <span>Auto Discount (5%)</span>
+                    <span>-₹{discountAmount.toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="d-flex justify-content-between">
+                  <span>Tax ({taxRate}%)</span>
+                  <span>+₹{taxAmount.toFixed(2)}</span>
+                </div>
+                <div className="d-flex justify-content-between fw-bold fs-5">
+                  <span>Total</span>
+                  <span>₹{total.toFixed(2)}</span>
+                </div>
               </div>
             </div>
           </div>
         )}
-
       </div>
 
       {/* Styles */}

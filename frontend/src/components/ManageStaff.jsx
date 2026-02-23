@@ -11,7 +11,7 @@ const ManageStaff = () => {
   const fetchStaffList = async () => {
     try {
       const res = await axios.get(
-        "https://retail-edge-plw7.onrender.com/staff",
+        "https://retail-edge-plw7.onrender.com/api/staff",
       );
       setStaffList(res.data);
     } catch (error) {
@@ -27,7 +27,9 @@ const ManageStaff = () => {
   // Staff actions
   const handleActivate = async (id) => {
     try {
-      await axios.patch(`http://localhost:5000/api/staff/approve/${id}`);
+      await axios.patch(
+        `https://retail-edge-plw7.onrender.com/api/staff/approve/${id}`,
+      );
       toast.success("Staff activated");
       fetchStaffList();
     } catch (error) {
@@ -38,7 +40,9 @@ const ManageStaff = () => {
 
   const handleDeactivate = async (id) => {
     try {
-      await axios.patch(`http://localhost:5000/api/staff/deactivate/${id}`);
+      await axios.patch(
+        `https://retail-edge-plw7.onrender.com/api/staff/deactivate/${id}`,
+      );
       toast.info("Staff deactivated");
       fetchStaffList();
     } catch (error) {
@@ -51,7 +55,9 @@ const ManageStaff = () => {
     if (!window.confirm("Are you sure you want to delete this staff?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/staff/${id}`);
+      await axios.delete(
+        `https://retail-edge-plw7.onrender.com/api/staff/${id}`,
+      );
       toast.success("Staff deleted");
       fetchStaffList();
     } catch (error) {

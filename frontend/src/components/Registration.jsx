@@ -38,7 +38,7 @@ const Registration = () => {
 
     if (!validatePassword(password)) {
       toast.error(
-        "Password must be 8+ chars and include uppercase, lowercase, number & symbol"
+        "Password must be 8+ chars and include uppercase, lowercase, number & symbol",
       );
       return;
     }
@@ -46,7 +46,10 @@ const Registration = () => {
     try {
       setLoading(true);
 
-      await axios.post("http://localhost:5000/api/register", formData);
+      await axios.post(
+        "https://retail-edge-plw7.onrender.com/register",
+        formData,
+      );
 
       toast.success("User registered successfully 🎉");
 
@@ -148,8 +151,8 @@ const Registration = () => {
                         formData.password.length === 0
                           ? "text-muted"
                           : validatePassword(formData.password)
-                          ? "text-success"
-                          : "text-danger"
+                            ? "text-success"
+                            : "text-danger"
                       }
                     >
                       Password must be 8+ chars, include A-Z, a-z, number &
