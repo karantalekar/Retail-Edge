@@ -16,7 +16,7 @@ const ManageAdmin = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "https://retail-edge-plw7.onrender.com/me",
+          "https://retail-edge-plw7.onrender.com/api/me",
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -48,7 +48,7 @@ const ManageAdmin = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        "https://retail-edge-plw7.onrender.com/me",
+        "https://retail-edge-plw7.onrender.com/api/me",
         {
           fullname: admin.fullname,
           email: admin.email,

@@ -51,7 +51,7 @@ const LowStockAlert = () => {
     const fetchLowStock = async () => {
       try {
         const res = await axios.get(
-          "https://retail-edge-plw7.onrender.com/products/low-stock",
+          "https://retail-edge-plw7.onrender.com/api/products/low-stock",
         );
 
         setLowStock(res.data);

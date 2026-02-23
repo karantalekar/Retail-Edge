@@ -35,13 +35,13 @@ const Report = () => {
       try {
         const token = localStorage.getItem("token");
         const salesRes = await axios.get(
-          "https://retail-edge-plw7.onrender.com/sales",
+          "https://retail-edge-plw7.onrender.com/api/sales",
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
         const productsRes = await axios.get(
-          "https://retail-edge-plw7.onrender.com/products",
+          "https://retail-edge-plw7.onrender.com/api/products",
         );
         setSales(salesRes.data);
         setProducts(productsRes.data);

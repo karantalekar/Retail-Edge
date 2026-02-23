@@ -47,7 +47,7 @@ const Registration = () => {
       setLoading(true);
 
       await axios.post(
-        "https://retail-edge-plw7.onrender.com/register",
+        "https://retail-edge-plw7.onrender.com/api/register",
         formData,
       );
 

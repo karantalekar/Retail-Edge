@@ -14,7 +14,15 @@ const app = express();
 const router = express.Router();
 
 // middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://retail-edge-sepia.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 
 // DB

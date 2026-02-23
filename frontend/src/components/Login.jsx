@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -29,7 +29,7 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        "https://retail-edge-plw7.onrender.com/login",
+        "https://retail-edge-plw7.onrender.com/api/login",
         {
           email,
           password,

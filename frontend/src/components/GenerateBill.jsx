@@ -136,7 +136,7 @@ const GenerateBill = () => {
       };
 
       const res = await axios.post(
-        "https://retail-edge-plw7.onrender.com/bills",
+        "https://retail-edge-plw7.onrender.com/api/bills",
         billData,
       );
       toast.success("Bill saved successfully!");

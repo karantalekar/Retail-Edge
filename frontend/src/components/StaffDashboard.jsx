@@ -13,8 +13,8 @@ const StaffDashboard = () => {
     const fetchData = async () => {
       try {
         const [prodRes, salesRes] = await Promise.all([
-          axios.get("https://retail-edge-plw7.onrender.com/products"),
-          axios.get("https://retail-edge-plw7.onrender.com/sales"),
+          axios.get("https://retail-edge-plw7.onrender.com/api/products"),
+          axios.get("https://retail-edge-plw7.onrender.com/api/sales"),
         ]);
         setProducts(prodRes.data || []);
         setSales(salesRes.data || []);
