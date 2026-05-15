@@ -16,7 +16,9 @@ const Cart = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get(
+          "https://retail-edge-6kx1.onrender.com/api/products",
+        );
         setProducts(res.data);
       } catch (error) {
         toast.error("Error fetching products:", error);
@@ -28,7 +30,7 @@ const Cart = () => {
   const filteredProducts = products.filter(
     (p) =>
       p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.category.toLowerCase().includes(searchTerm.toLowerCase())
+      p.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const addToCart = (product) => {
@@ -40,8 +42,8 @@ const Cart = () => {
         cart.map((item) =>
           item._id === product._id
             ? { ...item, quantity: item.quantity + quantity }
-            : item
-        )
+            : item,
+        ),
       );
     } else {
       setCart([...cart, { ...product, quantity }]);
@@ -55,7 +57,7 @@ const Cart = () => {
 
   const updateCartQuantity = (id, quantity) =>
     setCart(
-      cart.map((item) => (item._id === id ? { ...item, quantity } : item))
+      cart.map((item) => (item._id === id ? { ...item, quantity } : item)),
     );
 
   const handleQuantityChange = (id, value) => {
@@ -65,7 +67,7 @@ const Cart = () => {
 
   const totalAmount = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
-    0
+    0,
   );
 
   return (
@@ -174,7 +176,7 @@ const Cart = () => {
                               onChange={(e) =>
                                 updateCartQuantity(
                                   item._id,
-                                  parseInt(e.target.value)
+                                  parseInt(e.target.value),
                                 )
                               }
                             />

@@ -18,9 +18,11 @@ const Report = () => {
     // e.preventDefault();
     const fetchData = async () => {
       try {
-        const salesRes = await axios.get("http://localhost:5000/api/sales");
+        const salesRes = await axios.get(
+          "https://retail-edge-6kx1.onrender.com/api/sales",
+        );
         const productsRes = await axios.get(
-          "http://localhost:5000/api/products"
+          "https://retail-edge-6kx1.onrender.com/api/products",
         );
         setSales(salesRes.data);
         setProducts(productsRes.data);
@@ -37,7 +39,9 @@ const Report = () => {
     if (veryLowStock.length > 0) {
       toast.warning(
         `⚠️ Warning: The following products have stock less than 3!\n` +
-          veryLowStock.map((p) => `${p.name} (Stock: ${p.quantity})`).join("\n")
+          veryLowStock
+            .map((p) => `${p.name} (Stock: ${p.quantity})`)
+            .join("\n"),
       );
     }
   }, [products]);
@@ -119,19 +123,19 @@ const Report = () => {
   const searchedProducts = Object.entries(productWiseSales).filter(
     ([name, data]) =>
       name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      data.category.toLowerCase().includes(searchTerm.toLowerCase())
+      data.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const totalSales = filteredSales.reduce(
     (acc, s) => acc + (s.total || s.totalAmount || 0),
-    0
+    0,
   );
 
   const formattedSales = totalSales.toFixed(2);
 
   const totalProductsSold = filteredSales.reduce(
     (acc, s) => acc + s.items.reduce((iAcc, item) => iAcc + item.quantity, 0),
-    0
+    0,
   );
 
   const lowStockProducts = products.filter((p) => p.quantity < 5);

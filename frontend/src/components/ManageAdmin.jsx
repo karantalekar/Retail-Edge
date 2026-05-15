@@ -17,9 +17,12 @@ const ManageAdmin = () => {
     const fetchAdmin = async () => {
       try {
         const token = localStorage.getItem("token"); // assuming you stored JWT
-        const res = await axios.get("http://localhost:5000/api/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://retail-edge-6kx1.onrender.com/api/me",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
         setAdmin({
           fullname: res.data.fullname,
           email: res.data.email,
@@ -50,13 +53,13 @@ const ManageAdmin = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        "http://localhost:5000/api/me",
+        "https://retail-edge-6kx1.onrender.com/api/me",
         {
           fullname: admin.fullname,
           email: admin.email,
           ...(newPassword && { password: newPassword }), // only update if provided
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       toast.success("Profile updated successfully!");
       setNewPassword("");

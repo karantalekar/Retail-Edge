@@ -18,7 +18,9 @@ const AddProduct = () => {
   // Fetch all products from backend
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get(
+        "https://retail-edge-6kx1.onrender.com/api/products",
+      );
       setProducts(res.data);
     } catch (error) {
       toast.error("Error fetching products:", error);
@@ -93,12 +95,15 @@ const AddProduct = () => {
     try {
       if (editingProduct) {
         await axios.put(
-          `http://localhost:5000/api/products/${editingProduct._id}`,
+          `https://retail-edge-6kx1.onrender.com/api/products/${editingProduct._id}`,
           payload,
         );
         setMessage("✅ Product updated successfully!");
       } else {
-        await axios.post("http://localhost:5000/api/products", payload);
+        await axios.post(
+          "https://retail-edge-6kx1.onrender.com/api/products",
+          payload,
+        );
         setMessage("✅ Product added successfully!");
       }
 
@@ -117,7 +122,9 @@ const AddProduct = () => {
     if (!window.confirm("Are you sure you want to delete this product?"))
       return;
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(
+        `https://retail-edge-6kx1.onrender.com/api/products/${id}`,
+      );
       setMessage("🗑️ Product deleted successfully!");
       fetchProducts();
     } catch (error) {
