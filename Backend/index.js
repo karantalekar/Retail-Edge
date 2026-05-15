@@ -18,10 +18,12 @@ const app = express();
 //  Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173", // your frontend
+    origin: "https://retail-edge-sepia.vercel.app", // your frontend
     credentials: true,
   }),
 );
+
+app.options("*", cors());
 
 // Apply globally
 app.use(globalLimiter);
