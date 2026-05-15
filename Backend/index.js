@@ -23,8 +23,6 @@ app.use(
   }),
 );
 
-app.options("*", cors());
-
 // Apply globally
 app.use(globalLimiter);
 app.use(express.json());
