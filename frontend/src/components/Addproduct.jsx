@@ -13,6 +13,7 @@ const AddProduct = () => {
   const [products, setProducts] = useState([]); // all products
   const [message, setMessage] = useState("");
   const [editingProduct, setEditingProduct] = useState(null); // track editing
+  const [duplicateNameError, setDuplicateNameError] = useState(""); // 🔥 duplicate check
 
   // Fetch all products from backend
   const fetchProducts = async () => {
@@ -37,7 +38,9 @@ const AddProduct = () => {
     if (veryLowStock.length > 0) {
       toast.warning(
         `⚠️ Warning: The following products have very low stock!\n` +
-          veryLowStock.map((p) => `${p.name} (Stock: ${p.quantity})`).join("\n")
+          veryLowStock
+            .map((p) => `${p.name} (Stock: ${p.quantity})`)
+            .join("\n"),
       );
     }
   }, [products]);
@@ -46,11 +49,40 @@ const AddProduct = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // 🔥 Check for duplicate product name
+    if (name === "name" && value.trim()) {
+      const isDuplicate = products.some(
+        (p) =>
+          p.name.toLowerCase() === value.toLowerCase() &&
+          p._id !== editingProduct?._id, // allow same name if editing
+      );
+
+      console.log("Checking duplicate:", value, "Found:", isDuplicate); // debugging
+      console.log(
+        "Products list:",
+        products.map((p) => p.name),
+      ); // debugging
+
+      if (isDuplicate) {
+        setDuplicateNameError("⚠️ Product with this name already exists!");
+      } else {
+        setDuplicateNameError("");
+      }
+    } else if (name === "name") {
+      setDuplicateNameError("");
+    }
   };
 
   // Submit new product
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // 🔥 Prevent submit if duplicate name
+    if (duplicateNameError) {
+      setMessage("❌ " + duplicateNameError);
+      return;
+    }
 
     const payload = {
       ...formData,
@@ -62,7 +94,7 @@ const AddProduct = () => {
       if (editingProduct) {
         await axios.put(
           `http://localhost:5000/api/products/${editingProduct._id}`,
-          payload
+          payload,
         );
         setMessage("✅ Product updated successfully!");
       } else {
@@ -72,6 +104,7 @@ const AddProduct = () => {
 
       setFormData({ name: "", category: "", quantity: "", price: "" });
       setEditingProduct(null);
+      setDuplicateNameError("");
       fetchProducts(); // refresh list to trigger low stock alert
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
@@ -138,10 +171,15 @@ const AddProduct = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="form-control"
+                  className={`form-control ${duplicateNameError ? "border-danger" : ""}`}
                   placeholder="Enter product name"
                   required
                 />
+                {duplicateNameError && (
+                  <small className="text-danger d-block mt-2 fw-semibold">
+                    {duplicateNameError}
+                  </small>
+                )}
               </div>
 
               <div className="col-md-6 mb-3">
@@ -187,7 +225,16 @@ const AddProduct = () => {
             </div>
 
             <div className="text-center mt-4">
-              <button type="submit" className="btn btn-primary px-5">
+              <button
+                type="submit"
+                className="btn btn-primary px-5"
+                disabled={duplicateNameError ? true : false}
+                title={
+                  duplicateNameError
+                    ? "Cannot add product with duplicate name"
+                    : ""
+                }
+              >
                 {editingProduct ? "Update Product" : "Add Product"}
               </button>
               {editingProduct && (
@@ -202,6 +249,7 @@ const AddProduct = () => {
                       quantity: "",
                       price: "",
                     });
+                    setDuplicateNameError("");
                   }}
                 >
                   Cancel

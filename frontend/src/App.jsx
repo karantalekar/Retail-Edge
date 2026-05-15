@@ -13,6 +13,8 @@ import PrivateRoute from "./Context/PrivateRoute";
 import ManageStaff from "./components/ManageStaff";
 import ManageAdmin from "./components/ManageAdmin";
 import Dashboard from "./components/Dashboard";
+import AdminRegister from "./components/AdminRegister";
+
 // 🔔 Toast imports (ADDED)
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -38,6 +40,9 @@ function App() {
         <Route path="/Login" element={<Login />} />
 
         {/* 🔒 Admin Only Routes */}
+
+        <Route path="/admin-register" element={<AdminRegister />} />
+
         <Route
           path="/Home"
           element={
