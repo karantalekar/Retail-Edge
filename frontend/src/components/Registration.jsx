@@ -1,194 +1,96 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useMemo, useState } from "react";
+import { FaCheck, FaEye, FaEyeSlash, FaIdBadge, FaShieldAlt, FaUserPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Navbar from "./Navbar";
+import api from "../config/api";
+import staffOnboardingImage from "../assets/staff-onboarding.png";
+import "../style/AdminWorkspace.css";
+
+const emptyForm = { fullName: "", email: "", password: "", role: "staff" };
 
 const Registration = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    role: "",
-  });
-
+  const [formData, setFormData] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // 🔐 Password Validation
-  const validatePassword = (password) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-    return regex.test(password);
+  const passwordChecks = useMemo(() => [
+    { label: "8+ characters", valid: formData.password.length >= 8 },
+    { label: "Uppercase", valid: /[A-Z]/.test(formData.password) },
+    { label: "Lowercase", valid: /[a-z]/.test(formData.password) },
+    { label: "Number", valid: /\d/.test(formData.password) },
+    { label: "Symbol", valid: /[@$!%*?&#]/.test(formData.password) },
+  ], [formData.password]);
+  const passwordValid = passwordChecks.every((check) => check.valid);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
   };
 
-  // 📝 Handle Input Change
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // 🚀 Handle Form Submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const { fullName, email, password, role } = formData;
-
-    if (!fullName || !email || !password || !role) {
-      toast.error("All fields are required");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!passwordValid) {
+      toast.error("Create a password that meets every security requirement");
       return;
     }
-
-    if (!validatePassword(password)) {
-      toast.error(
-        "Password must be 8+ chars and include uppercase, lowercase, number & symbol",
-      );
-      return;
-    }
-
+    setLoading(true);
     try {
-      setLoading(true);
-
-      await axios.post(
-        "https://retail-edge-6kx1.onrender.com/api/register",
-        formData,
-      );
-
-      toast.success("User registered successfully ");
-
-      setFormData({
-        fullName: "",
-        email: "",
-        password: "",
-        role: "",
+      await api.post("/register", {
+        ...formData,
+        fullName: formData.fullName.trim(),
+        email: formData.email.trim(),
       });
-
-      // optional redirect
-      // navigate("/users");
+      toast.success("Staff account created and ready for approval");
+      setFormData(emptyForm);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Registration failed ");
+      console.error(error);
+      toast.error(error.response?.data?.message || "Unable to register staff");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <>
+    <div className="admin-page">
       <Navbar />
+      <main className="container-fluid px-3 px-lg-4 admin-main">
+        <header className="admin-header">
+          <div><span>TEAM ONBOARDING</span><h1>Register staff</h1><p>Create secure access for a new member of your retail team.</p></div>
+        </header>
 
-      <div
-        className="container-fluid min-vh-100 d-flex align-items-center justify-content-center mt-4"
-        style={{
-          background: "linear-gradient(to right, #e9f0f7, #f5f8fb)",
-          fontFamily: "Poppins, sans-serif",
-        }}
-      >
-        <div className="container p-4">
-          <div className="text-center mb-4">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/1034/1034146.png"
-              width="70"
-              alt="User Icon"
-              // className="mt-1"
-            />
-            <h3 className="mt-2 fw-bold text-primary">Add User</h3>
+        <section className="admin-panel staff-registration-card">
+          <div className="registration-form-panel">
+            <div className="admin-panel-heading"><div><h2>Staff information</h2><p>All fields are required.</p></div><span className="admin-heading-icon"><FaUserPlus /></span></div>
+            <form className="admin-form" onSubmit={handleSubmit}>
+              <label><span>Full name</span><input className="form-control" type="text" name="fullName" value={formData.fullName} onChange={handleChange} placeholder="e.g. Aisha Sharma" autoComplete="name" required /></label>
+              <label><span>Work email</span><input className="form-control" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="aisha@company.com" autoComplete="email" required /></label>
+              <label><span>Account role</span><div className="role-card selected"><FaIdBadge /><div><strong>Store staff</strong><small>Billing and daily sales access</small></div><span><FaCheck /></span></div><input type="hidden" name="role" value="staff" /></label>
+              <label><span>Temporary password</span><div className="admin-password-input"><input className="form-control" type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} placeholder="Create a secure password" autoComplete="new-password" required /><button type="button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? "Hide password" : "Show password"}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button></div></label>
+              <div className="password-checks">{passwordChecks.map((check) => <span key={check.label} className={check.valid ? "valid" : ""}><FaCheck /> {check.label}</span>)}</div>
+              <button className="btn btn-primary admin-primary-action" disabled={loading || !passwordValid}>{loading ? "Creating account…" : <><FaUserPlus /> Create staff account</>}</button>
+            </form>
           </div>
 
-          <div className="row justify-content-center align-items-center">
-            {/* Left Image */}
-            <div className="col-md-5 d-none d-md-block">
-              <img
-                src="https://img.freepik.com/free-vector/warehouse-concept-illustration_114360-1151.jpg"
-                alt="Retail Management"
-                className="img-fluid rounded shadow-sm"
-              />
+          <aside className="registration-visual-panel">
+            <div className="registration-image-wrap">
+              <img src={staffOnboardingImage} alt="Retail team welcoming a new staff member" />
             </div>
-
-            {/* Registration Form */}
-            <div className="col-md-6 col-lg-5">
-              <div className="card shadow-lg border-0 rounded-4">
-                <div className="card-body p-4">
-                  <form onSubmit={handleSubmit}>
-                    {/* Full Name */}
-                    <div className="mb-3">
-                      <label className="form-label">Full Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="fullName"
-                        placeholder="Enter full name"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                      />
-                    </div>
-
-                    {/* Email */}
-                    <div className="mb-3">
-                      <label className="form-label">Email Address</label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        name="email"
-                        placeholder="Enter email"
-                        value={formData.email}
-                        onChange={handleChange}
-                      />
-                    </div>
-
-                    {/* Password */}
-                    <div className="mb-1">
-                      <label className="form-label">Password</label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        name="password"
-                        placeholder="Create password"
-                        value={formData.password}
-                        onChange={handleChange}
-                      />
-                    </div>
-
-                    {/* Password Hint */}
-                    <small
-                      className={
-                        formData.password.length === 0
-                          ? "text-muted"
-                          : validatePassword(formData.password)
-                            ? "text-success"
-                            : "text-danger"
-                      }
-                    >
-                      Password must be 8+ chars, include A-Z, a-z, number &
-                      symbol
-                    </small>
-
-                    {/* Role */}
-                    <div className="mb-3 mt-3">
-                      <label className="form-label">Register As</label>
-                      <select
-                        className="form-select"
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                      >
-                        <option value="">Select Role</option>
-                        <option value="staff">Staff</option>
-                      </select>
-                    </div>
-
-                    {/* Submit Button */}
-                    <button
-                      type="submit"
-                      className="btn btn-primary w-100 rounded-pill"
-                      disabled={loading}
-                    >
-                      {loading ? "Adding..." : "Add User"}
-                    </button>
-                  </form>
-                </div>
+            <div className="registration-visual-copy">
+              <span className="onboarding-icon"><FaShieldAlt /></span>
+              <div>
+                <h2>Secure staff onboarding</h2>
+                <p>New accounts stay inactive until an administrator reviews and approves access.</p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </>
+            <div className="registration-benefits">
+              <span><FaCheck /> Role-based workspace access</span>
+              <span><FaCheck /> Administrator approval required</span>
+              <span><FaCheck /> Secure password standards</span>
+            </div>
+          </aside>
+        </section>
+      </main>
+    </div>
   );
 };
 

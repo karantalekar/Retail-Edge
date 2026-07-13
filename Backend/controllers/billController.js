@@ -4,17 +4,48 @@ import Product from "../models/Products.js";
 // ─── Create Bill ───────────────────────────────────────────────────────────
 export const createBill = async (req, res) => {
   try {
-    const { customer, items, discount, taxRate } = req.body;
+    const { customer, items, taxRate = 0.18 } = req.body;
+
+    const customerName = customer?.name?.trim() || "";
+    const customerMobile = customer?.mobile?.trim() || "";
+    const customerEmail = customer?.email?.trim() || "";
+    if (
+      customerName.length < 2 ||
+      customerName.length > 60 ||
+      !/^[\p{L}\s.'-]+$/u.test(customerName)
+    ) {
+      return res.status(400).json({ message: "Enter a valid customer name" });
+    }
+    if (!/^[6-9]\d{9}$/.test(customerMobile)) {
+      return res.status(400).json({ message: "Enter a valid 10-digit Indian mobile number" });
+    }
+    if (customerEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(customerEmail)) {
+      return res.status(400).json({ message: "Enter a valid customer email address" });
+    }
+    if (!Array.isArray(items) || !items.length) {
+      return res.status(400).json({ message: "Add at least one item to the bill" });
+    }
 
     const subtotal = items.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0,
     );
+    const discountRate = subtotal < 1000 ? 0.1 : 0.15;
+    const discount = subtotal * discountRate;
     const taxAmount = (subtotal - discount) * taxRate;
     const total = subtotal - discount + taxAmount;
 
     const newBill = new Bill({
-      customer,
+      customer: {
+        name: customerName,
+        mobile: customerMobile,
+        email: customerEmail,
+      },
+      staff: {
+        userId: req.user._id,
+        fullname: req.user.fullname,
+        email: req.user.email,
+      },
       items,
       subtotal,
       discount,

@@ -7,6 +7,11 @@ const BillSchema = new mongoose.Schema(
       mobile: { type: String, required: true },
       email: { type: String, required: false },
     },
+    staff: {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      fullname: { type: String, default: "Unknown staff" },
+      email: { type: String, default: "" },
+    },
     items: [
       {
         productId: {

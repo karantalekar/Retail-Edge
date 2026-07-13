@@ -51,6 +51,12 @@
 // };
 
 import User from "../models/Users.js";
+import bcrypt from "bcryptjs";
+
+const validatePassword = (password) =>
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(
+    password,
+  );
 
 // ─── Get All Staff ─────────────────────────────────────────────────────────
 export const getStaff = async (req, res) => {
@@ -180,6 +186,40 @@ export const deleteStaff = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      success: false,
+      message: error.message || "Server Error",
+    });
+  }
+};
+
+export const resetStaffPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!validatePassword(password || "")) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Password must be at least 8 characters and include uppercase, lowercase, number and special character",
+      });
+    }
+
+    const staff = await User.findOne({ _id: req.params.id, role: "staff" }).select(
+      "+password",
+    );
+    if (!staff) {
+      return res.status(404).json({ success: false, message: "Staff not found" });
+    }
+
+    staff.password = await bcrypt.hash(password, 10);
+    staff.passwordResetRequestedAt = null;
+    await staff.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Temporary password assigned successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
       success: false,
       message: error.message || "Server Error",
     });

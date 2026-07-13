@@ -1,0 +1,17 @@
+<svg width="60" height="60" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="logoShadow" x="4" y="4" width="56" height="58" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#0F2F73" flood-opacity="0.24" />
+    </filter>
+  </defs>
+
+  <g filter="url(#logoShadow)">
+    <!-- Blue outline keeps the white handle visible on light backgrounds. -->
+    <path d="M20 17 C20 8, 44 8, 44 17" stroke="#1D4ED8" stroke-width="7" stroke-linecap="round" fill="none" />
+    <path d="M20 17 C20 8, 44 8, 44 17" stroke="white" stroke-width="3" stroke-linecap="round" fill="none" />
+
+    <rect x="12" y="16" width="40" height="40" rx="7" fill="#1D4ED8" />
+    <circle cx="24" cy="36" r="2" fill="white" />
+    <circle cx="40" cy="36" r="2" fill="white" />
+  </g>
+</svg>

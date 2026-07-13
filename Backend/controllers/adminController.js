@@ -24,10 +24,6 @@ const getAuthUser = async (req) => {
     throw { status: 404, message: "User not found" };
   }
 
-  if (user.role !== "admin") {
-    throw { status: 403, message: "Access denied: Admins only" };
-  }
-
   return user;
 };
 
@@ -60,10 +56,34 @@ export const updateMe = async (req, res) => {
     const admin = await getAuthUser(req);
     const { fullname, email, password } = req.body;
 
-    if (fullname) admin.fullname = fullname;
-    if (email) admin.email = email;
+    if (fullname) admin.fullname = fullname.trim();
+    if (email) {
+      const normalizedEmail = email.trim().toLowerCase();
+      const emailOwner = await User.findOne({
+        email: normalizedEmail,
+        _id: { $ne: admin._id },
+      });
+      if (emailOwner) {
+        return res.status(400).json({
+          success: false,
+          message: "Email is already in use",
+        });
+      }
+      admin.email = normalizedEmail;
+    }
 
     if (password) {
+      const validPassword =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(
+          password,
+        );
+      if (!validPassword) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Password must be at least 8 characters and include uppercase, lowercase, number and special character",
+        });
+      }
       const hashedPassword = await bcrypt.hash(password, 10);
       admin.password = hashedPassword;
     }

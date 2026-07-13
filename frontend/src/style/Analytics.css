@@ -1,0 +1,233 @@
+.analytics-page {
+  min-height: 100vh;
+  background: #f4f7fb;
+  color: #172033;
+}
+
+.analytics-main {
+  padding-top: 94px;
+  padding-bottom: 40px;
+}
+
+.analytics-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.analytics-eyebrow {
+  color: #2563eb;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.analytics-header h1 {
+  margin: 4px 0;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 750;
+}
+
+.analytics-header p,
+.panel-heading p {
+  color: #718096;
+  margin: 0;
+}
+
+.analytics-actions {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.analytics-actions .form-select {
+  min-width: 155px;
+}
+
+.analytics-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.analytics-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.analytics-metric,
+.analytics-panel {
+  background: #ffffff;
+  border: 1px solid #e7ecf3;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(28, 39, 60, 0.05);
+}
+
+.analytics-metric {
+  display: flex;
+  gap: 14px;
+  padding: 20px;
+}
+
+.metric-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  font-size: 1.15rem;
+}
+
+.metric-icon.blue { background: #eaf1ff; color: #2563eb; }
+.metric-icon.teal { background: #e4f8f5; color: #0f9f91; }
+.metric-icon.purple { background: #f0eaff; color: #7c3aed; }
+.metric-icon.amber { background: #fff4db; color: #d97706; }
+
+.analytics-metric p {
+  color: #718096;
+  font-size: 0.85rem;
+  margin: 0 0 3px;
+}
+
+.analytics-metric h2 {
+  font-size: 1.45rem;
+  margin: 0 0 2px;
+  font-weight: 750;
+}
+
+.analytics-metric small {
+  color: #93a0b2;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.analytics-panel {
+  min-width: 0;
+  padding: 20px;
+}
+
+.analytics-trend {
+  grid-column: span 2;
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.panel-heading h3 {
+  font-size: 1.05rem;
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+
+.panel-heading-icon {
+  color: #2563eb;
+  font-size: 1.25rem;
+}
+
+.chart-wrap {
+  height: 280px;
+}
+
+.chart-empty,
+.analytics-loading {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #8290a3;
+}
+
+.analytics-loading {
+  min-height: 55vh;
+}
+
+.staff-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.staff-legend > div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 7px;
+  font-size: 0.78rem;
+}
+
+.staff-legend span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  align-self: center;
+  grid-row: span 2;
+}
+
+.staff-legend small {
+  color: #8491a3;
+}
+
+.alert-count {
+  background: #fff0ed;
+  color: #dc2626;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-weight: 700;
+}
+
+.stock-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.stock-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.stock-row:last-child { border-bottom: 0; }
+.stock-row div { display: flex; flex-direction: column; }
+.stock-row small { color: #8693a4; }
+.stock-row > span {
+  color: #dc2626;
+  background: #fff0ed;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.spin { animation: analytics-spin 0.9s linear infinite; }
+@keyframes analytics-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 1050px) {
+  .analytics-metrics { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 767px) {
+  .analytics-header { align-items: stretch; flex-direction: column; }
+  .analytics-actions { flex-wrap: wrap; }
+  .analytics-metrics, .analytics-grid { grid-template-columns: 1fr; }
+  .analytics-trend { grid-column: span 1; }
+  .analytics-metric { padding: 16px; }
+  .analytics-panel { padding: 16px; }
+  .chart-wrap { height: 250px; }
+}

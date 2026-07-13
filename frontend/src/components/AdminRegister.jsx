@@ -55,7 +55,7 @@
 //     try {
 //       setLoading(true);
 
-//       const res = await axios.post("https://retail-edge-6kx1.onrender.com/api/register", {
+//       const res = await axios.post("http://localhost:5000/api/register", {
 //         fullName: formData.fullName,
 //         email: formData.email,
 //         password: formData.password,
@@ -181,8 +181,8 @@
 // export default AdminRegister;
 
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../config/api";
 
 const AdminRegister = () => {
   const navigate = useNavigate();
@@ -231,8 +231,8 @@ const AdminRegister = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "https://retail-edge-6kx1.onrender.com/api/admin/register",
+      const res = await api.post(
+        "/admin/register",
         {
           fullName: formData.fullName,
           email: formData.email,
@@ -258,9 +258,9 @@ const AdminRegister = () => {
           adminKey: "",
         });
 
-        // Redirect to Home after successful registration
+        // Redirect to analytics after successful registration
         setTimeout(() => {
-          navigate("/Home");
+          navigate("/Analytics");
         }, 1500);
       }
     } catch (err) {

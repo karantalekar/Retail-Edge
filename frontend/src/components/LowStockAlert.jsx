@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
+import api from "../config/api";
 
 const LowStockAlert = () => {
-  const [lowStock, setLowStock] = useState([]);
-
   useEffect(() => {
     const fetchLowStock = async () => {
       try {
-        const res = await axios.get(
-          "https://retail-edge-6kx1.onrender.com/api/products/low-stock",
-        );
-
-        setLowStock(res.data);
+        const res = await api.get("/products/low-stock");
 
         // 🔔 Show toast for each low stock item
         res.data.forEach((item) => {

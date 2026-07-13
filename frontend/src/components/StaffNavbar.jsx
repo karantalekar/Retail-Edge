@@ -1,132 +1,100 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
-import "../assets/StaffNavbar.css";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FaBars, FaChevronDown, FaCog, FaSignOutAlt, FaTimes, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
+import ConfirmDialog from "./ConfirmDialog";
+import "../assets/StaffNavbar.css";
+
 const StaffNavbar = () => {
   const navigate = useNavigate();
-  const [staffOpen, setStaffOpen] = useState(false);
+  const { pathname } = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
+  const profileRef = useRef(null);
+  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const staffName = storedUser.fullname || "Staff member";
+
+  useEffect(() => {
+    const closeProfile = (event) => {
+      if (!profileRef.current?.contains(event.target)) setProfileOpen(false);
+    };
+    document.addEventListener("mousedown", closeProfile);
+    return () => document.removeEventListener("mousedown", closeProfile);
+  }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+    setProfileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const syncTheme = (event) => {
+      document.documentElement.dataset.staffTheme =
+        event?.detail || localStorage.getItem("retailEdgeStaffTheme") || "light";
+    };
+    syncTheme();
+    window.addEventListener("retailEdgeStaffThemeChange", syncTheme);
+    return () => window.removeEventListener("retailEdgeStaffThemeChange", syncTheme);
+  }, []);
 
   const handleLogout = () => {
-    if (toast.error("do you want to logout ?")) {
-      localStorage.removeItem("User");
-      localStorage.removeItem("token");
-      // alert("Logout Successfully");
-      toast.success("Logout Successfully");
-      navigate("/Login");
-    }
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setLogoutOpen(false);
+    toast.success("Signed out successfully");
+    navigate("/Login");
   };
 
-  return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-      <div className="container">
-        <span className="navbar-brand fw-bold">🛒 Retail Edge - Staff</span>
+  const isActive = (path) => pathname.toLowerCase() === path.toLowerCase();
 
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#staffNavbar"
-        >
-          <span className="navbar-toggler-icon"></span>
+  return (
+    <nav className="staff-navbar">
+      <div className="staff-navbar-inner">
+        <Link className="staff-navbar-brand" to="/Cart">
+          <span><img src="/logo.svg" alt="RetailEdge" /></span>
+          <strong>RetailEdge</strong>
+          <small>Staff</small>
+        </Link>
+
+        <button className="staff-mobile-toggle" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen}>
+          {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
 
-        <div className="collapse navbar-collapse" id="staffNavbar">
-          <ul className="navbar-nav ms-auto align-items-center">
-            {/* Home */}
-            <li className="nav-item me-3">
-              <span
-                className="nav-hover"
-                onClick={() => navigate("/Staffdashboard")}
-                style={{ cursor: "pointer" }}
-              >
-                Home
-              </span>
-            </li>
+        <div className={`staff-navbar-content ${menuOpen ? "open" : ""}`}>
+          <div className="staff-nav-links">
+            <Link className={isActive("/Cart") ? "active" : ""} to="/Cart">Inventory</Link>
+            <Link className={isActive("/Generatebill") ? "active" : ""} to="/Generatebill">Billing</Link>
+          </div>
 
-            {/* Inventory */}
-            <li className="nav-item me-3">
-              <span
-                className="nav-hover d-flex align-items-center"
-                onClick={() => navigate("/Cart")}
-                style={{ cursor: "pointer" }}
-              >
-                <FaShoppingCart className="me-1" /> Inventory
-              </span>
-            </li>
-
-            {/* User Dropdown */}
-            {/* <li className="nav-item dropdown">
-              <Link
-                className="nav-link dropdown-toggle d-flex align-items-center"
-                to="#"
-                role="button"
-                data-bs-toggle="dropdown"
-              >
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                  alt="Staff"
-                  width="35"
-                  height="35"
-                  className="rounded-circle me-2 border border-primary"
-                />
-                Staff
-              </Link>
-
-              <ul className="dropdown-menu dropdown-menu-end shadow-sm">
-                <li>
-                  <button
-                    className="dropdown-item text-danger fw-semibold"
-                    onClick={handleLogout}
-                  >
-                    <i class="fa-solid fa-right-from-bracket me-2"></i>
-                    Logout
-                  </button>
-                </li>
-              </ul>
-            </li> */}
-            <li
-              className="nav-item dropdown"
-              onMouseEnter={() =>
-                window.innerWidth >= 992 && setStaffOpen(true)
-              }
-              onMouseLeave={() =>
-                window.innerWidth >= 992 && setStaffOpen(false)
-              }
-            >
-              <button
-                className="nav-link dropdown-toggle d-flex align-items-center btn btn-link text-white"
-                onClick={() => setStaffOpen(!staffOpen)}
-              >
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                  alt="Staff"
-                  width="35"
-                  height="35"
-                  className="rounded-circle me-2 border border-primary"
-                />
-                Staff
-              </button>
-
-              <ul
-                className={`dropdown-menu dropdown-menu-end shadow-sm ${
-                  staffOpen ? "show" : ""
-                }`}
-              >
-                <li>
-                  <button
-                    className="dropdown-item text-danger fw-semibold"
-                    onClick={handleLogout}
-                  >
-                    <i className="fa-solid fa-right-from-bracket me-2"></i>
-                    Logout
-                  </button>
-                </li>
-              </ul>
-            </li>
-          </ul>
+          <div
+            className="staff-profile"
+            ref={profileRef}
+            onMouseEnter={() => window.innerWidth >= 768 && setProfileOpen(true)}
+            onMouseLeave={() => window.innerWidth >= 768 && setProfileOpen(false)}
+          >
+            <button className="staff-profile-trigger" onClick={() => setProfileOpen((value) => !value)} aria-expanded={profileOpen}>
+              <span className="staff-avatar">{staffName.charAt(0).toUpperCase()}</span>
+              <div><strong>{staffName}</strong><small>Store staff</small></div>
+              <FaChevronDown className={profileOpen ? "rotated" : ""} />
+            </button>
+            <div className={`staff-profile-menu ${profileOpen ? "show" : ""}`}>
+              <div className="staff-profile-summary"><FaUser /><div><strong>{staffName}</strong><small>{storedUser.email || "RetailEdge staff account"}</small></div></div>
+              <button className="staff-menu-action" onClick={() => navigate("/StaffSettings")}><FaCog /> Settings</button>
+              <button className="staff-menu-action signout" onClick={() => { setProfileOpen(false); setLogoutOpen(true); }}><FaSignOutAlt /> Sign out</button>
+            </div>
+          </div>
         </div>
       </div>
+      <ConfirmDialog
+        open={logoutOpen}
+        variant="logout"
+        title="Sign out of RetailEdge?"
+        description="Your current staff session will end and you’ll return to the login page."
+        confirmLabel="Sign out"
+        onConfirm={handleLogout}
+        onClose={() => setLogoutOpen(false)}
+      />
     </nav>
   );
 };

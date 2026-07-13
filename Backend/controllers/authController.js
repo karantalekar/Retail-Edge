@@ -116,6 +116,12 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Incorrect password." });
     }
 
+    if (user.role === "staff" && (!user.approved || !user.isActive)) {
+      return res.status(403).json({
+        message: "Your staff account is inactive. Please contact an admin.",
+      });
+    }
+
     if (role && user.role !== role.toLowerCase()) {
       return res.status(400).json({ message: "Role mismatch." });
     }
@@ -147,6 +153,30 @@ export const login = async (req, res) => {
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+export const requestPasswordReset = async (req, res) => {
+  try {
+    const email = req.body.email?.trim().toLowerCase();
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required." });
+    }
+
+    const user = await User.findOne({ email });
+    if (user) {
+      user.passwordResetRequestedAt = new Date();
+      await user.save();
+    }
+
+    return res.status(200).json({
+      message:
+        "If an account exists for this email, a password recovery request has been sent to your administrator.",
+    });
+  } catch (error) {
+    console.error("Password Reset Request Error:", error);
+    return res.status(500).json({ message: "Unable to submit recovery request." });
   }
 };
 

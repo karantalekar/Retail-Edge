@@ -1,23 +1,24 @@
 import "./App.css";
 import Registration from "./components/Registration";
 import Login from "./components/Login";
-import Home from "./components/Home";
+import Analytics from "./components/Analytics";
 import PageNotFound from "./components/PageNotFound";
 import { Routes, Route } from "react-router-dom";
 import Addproduct from "./components/Addproduct";
 import Cart from "./components/Cart";
 import Report from "./components/Report";
-import StaffDashboard from "./components/StaffDashboard";
 import GenerateBill from "./components/GenerateBill";
 import PrivateRoute from "./Context/PrivateRoute";
 import ManageStaff from "./components/ManageStaff";
 import ManageAdmin from "./components/ManageAdmin";
 import Dashboard from "./components/Dashboard";
 import AdminRegister from "./components/AdminRegister";
+import StaffSettings from "./components/StaffSettings";
 
 // 🔔 Toast imports (ADDED)
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./style/PastelTheme.css";
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
         closeOnClick
         pauseOnHover
         draggable
-        theme="colored"
+        theme="light"
       />
 
       <Routes>
@@ -44,10 +45,10 @@ function App() {
         <Route path="/admin-register" element={<AdminRegister />} />
 
         <Route
-          path="/Home"
+          path="/Analytics"
           element={
             <PrivateRoute allowedRoles={["admin"]}>
-              <Home />
+              <Analytics />
             </PrivateRoute>
           }
         />
@@ -93,14 +94,6 @@ function App() {
         />
         {/* 🧑‍💼 Staff + Admin Routes */}
         <Route
-          path="/Staffdashboard"
-          element={
-            <PrivateRoute allowedRoles={["staff", "admin"]}>
-              <StaffDashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/Generatebill"
           element={
             <PrivateRoute allowedRoles={["staff", "admin"]}>
@@ -113,6 +106,14 @@ function App() {
           element={
             <PrivateRoute allowedRoles={["staff", "admin"]}>
               <Cart />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/StaffSettings"
+          element={
+            <PrivateRoute allowedRoles={["staff", "admin"]}>
+              <StaffSettings />
             </PrivateRoute>
           }
         />
