@@ -1,188 +1,18 @@
-// import React, { useState } from "react";
-// import axios from "axios";
-
-// const AdminRegister = () => {
-//   const [formData, setFormData] = useState({
-//     fullName: "",
-//     email: "",
-//     password: "",
-//     adminKey: "",
-//   });
-
-//   const [loading, setLoading] = useState(false);
-//   const [message, setMessage] = useState("");
-//   const [error, setError] = useState("");
-
-//   // ─── Handle Input Change ────────────────────────────────────────────────
-//   const handleChange = (e) => {
-//     setFormData((prev) => ({
-//       ...prev,
-//       [e.target.name]: e.target.value,
-//     }));
-//   };
-
-//   // ─── Validate Form ──────────────────────────────────────────────────────
-//   const validateForm = () => {
-//     const { fullName, email, password, adminKey } = formData;
-
-//     if (!fullName || !email || !password || !adminKey) {
-//       setError("All fields are required");
-//       return false;
-//     }
-
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//     if (!emailRegex.test(email)) {
-//       setError("Invalid email format");
-//       return false;
-//     }
-
-//     if (password.length < 8) {
-//       setError("Password must be at least 8 characters");
-//       return false;
-//     }
-
-//     return true;
-//   };
-
-//   // ─── Submit Form ────────────────────────────────────────────────────────
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError("");
-//     setMessage("");
-
-//     if (!validateForm()) return;
-
-//     try {
-//       setLoading(true);
-
-//       const res = await axios.post("http://localhost:5000/api/register", {
-//         fullName: formData.fullName,
-//         email: formData.email,
-//         password: formData.password,
-//         role: "admin",
-//         adminKey: formData.adminKey,
-//       });
-
-//       setMessage(res.data.message || "Admin registered successfully");
-
-//       // Reset form
-//       setFormData({
-//         fullName: "",
-//         email: "",
-//         password: "",
-//         adminKey: "",
-//       });
-//     } catch (err) {
-//       setError(
-//         err.response?.data?.message || err.message || "Something went wrong",
-//       );
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // ─── UI ─────────────────────────────────────────────────────────────────
-//   return (
-//     <div className="container mt-5">
-//       <div className="row justify-content-center">
-//         <div className="col-md-5">
-//           <div className="card shadow-lg border-0">
-//             <div className="card-body p-4">
-//               <h3 className="text-center mb-4 fw-bold">Admin Registration</h3>
-
-//               {error && (
-//                 <div className="alert alert-danger text-center">{error}</div>
-//               )}
-
-//               {message && (
-//                 <div className="alert alert-success text-center">{message}</div>
-//               )}
-
-//               <form onSubmit={handleSubmit}>
-//                 {/* Full Name */}
-//                 <div className="mb-3">
-//                   <label className="form-label">Full Name</label>
-//                   <input
-//                     type="text"
-//                     className="form-control"
-//                     name="fullName"
-//                     value={formData.fullName}
-//                     onChange={handleChange}
-//                     placeholder="Enter full name"
-//                   />
-//                 </div>
-
-//                 {/* Email */}
-//                 <div className="mb-3">
-//                   <label className="form-label">Email</label>
-//                   <input
-//                     type="email"
-//                     className="form-control"
-//                     name="email"
-//                     value={formData.email}
-//                     onChange={handleChange}
-//                     placeholder="Enter email"
-//                     autoComplete="email"
-//                   />
-//                 </div>
-
-//                 {/* Password */}
-//                 <div className="mb-3">
-//                   <label className="form-label">Password</label>
-//                   <input
-//                     type="password"
-//                     className="form-control"
-//                     name="password"
-//                     value={formData.password}
-//                     onChange={handleChange}
-//                     placeholder="Enter password"
-//                     autoComplete="new-password"
-//                   />
-//                 </div>
-
-//                 {/* Admin Key */}
-//                 <div className="mb-3">
-//                   <label className="form-label">Admin Key</label>
-//                   <input
-//                     type="password"
-//                     className="form-control"
-//                     name="adminKey"
-//                     value={formData.adminKey}
-//                     onChange={handleChange}
-//                     placeholder="Enter admin key"
-//                     autoComplete="off"
-//                   />
-//                 </div>
-
-//                 {/* Submit Button */}
-//                 <button
-//                   type="submit"
-//                   className="btn btn-dark w-100"
-//                   disabled={loading}
-//                 >
-//                   {loading ? (
-//                     <>
-//                       <span className="spinner-border spinner-border-sm me-2"></span>
-//                       Registering...
-//                     </>
-//                   ) : (
-//                     "Register Admin"
-//                   )}
-//                 </button>
-//               </form>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminRegister;
-
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  KeyRound,
+  LockKeyhole,
+  Mail,
+  ShieldCheck,
+  UserRound,
+} from "lucide-react";
 import api from "../config/api";
+import "../style/AdminRegister.css";
 
 const AdminRegister = () => {
   const navigate = useNavigate();
@@ -193,31 +23,38 @@ const AdminRegister = () => {
     password: "",
     adminKey: "",
   });
-
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showAdminKey, setShowAdminKey] = useState(false);
+
+  const passwordStrength = useMemo(() => {
+    const password = formData.password;
+    if (!password) return 0;
+    return [
+      password.length >= 8,
+      /[A-Z]/.test(password) && /[a-z]/.test(password),
+      /\d/.test(password),
+      /[^A-Za-z0-9]/.test(password),
+    ].filter(Boolean).length;
+  }, [formData.password]);
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    if (error) setError("");
   };
 
   const validateForm = () => {
     const { fullName, email, password, adminKey } = formData;
-
     if (!fullName || !email || !password || !adminKey) {
       setError("All fields are required");
       return false;
     }
-
     if (password.length < 8) {
       setError("Password must be at least 8 characters");
       return false;
     }
-
     return true;
   };
 
@@ -225,43 +62,26 @@ const AdminRegister = () => {
     e.preventDefault();
     setError("");
     setMessage("");
-
     if (!validateForm()) return;
 
     try {
       setLoading(true);
-
-      const res = await api.post(
-        "/admin/register",
-        {
-          fullName: formData.fullName,
-          email: formData.email,
-          password: formData.password,
-          adminKey: formData.adminKey,
-        },
-      );
+      const res = await api.post("/admin/register", {
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        adminKey: formData.adminKey,
+      });
 
       setMessage(res.data.message || "Admin registered successfully");
-
-      // 🔥 Store token and user info for auto-login
       const token = res.data.token;
       const user = res.data.user;
 
       if (token && user) {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
-
-        setFormData({
-          fullName: "",
-          email: "",
-          password: "",
-          adminKey: "",
-        });
-
-        // Redirect to analytics after successful registration
-        setTimeout(() => {
-          navigate("/Analytics");
-        }, 1500);
+        setFormData({ fullName: "", email: "", password: "", adminKey: "" });
+        setTimeout(() => navigate("/Analytics"), 1500);
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
@@ -270,100 +90,197 @@ const AdminRegister = () => {
     }
   };
 
-  return (
-    <div className="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
-      <div
-        className="row shadow-lg bg-white rounded overflow-hidden"
-        style={{ maxWidth: "900px", width: "100%" }}
-      >
-        {/* LEFT SIDE IMAGE */}
-        <div className="col-md-6 d-none d-md-block p-0">
-          <img
-            src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=900&q=80"
-            alt="admin"
-            className="img-fluid h-100 w-100"
-            style={{ objectFit: "cover" }}
-          />
-        </div>
+  const strengthLabel = ["", "Weak", "Fair", "Good", "Strong"][
+    passwordStrength
+  ];
 
-        {/* RIGHT SIDE FORM */}
-        <div className="col-md-6 p-5">
-          <div className="text-center mb-4">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/2920/2920251.png"
-              width="70"
-              alt="admin icon"
-            />
-            <h3 className="mt-2 fw-bold">Admin Registration</h3>
-            <p className="text-muted">
-              Create admin account to access dashboard
+  return (
+    <main className="admin-register-page">
+      <div className="admin-register-glow admin-register-glow--one" />
+      <div className="admin-register-glow admin-register-glow--two" />
+
+      <section
+        className="admin-register-shell"
+        aria-labelledby="register-title"
+      >
+        <aside className="admin-register-intro">
+          <div className="admin-brand">
+            <span className="admin-brand__mark">
+              <ShieldCheck size={22} />
+            </span>
+            <span>RetailEdge</span>
+          </div>
+
+          <div className="admin-intro-copy">
+            <span className="admin-eyebrow">Secure workspace access</span>
+            <h1>Lead your retail operations with clarity.</h1>
+            <p>
+              Create a protected administrator profile to manage teams,
+              inventory, and performance from one place.
             </p>
           </div>
 
+          <div className="admin-trust-card">
+            <LockKeyhole size={20} />
+            <div>
+              <strong>Admin-only onboarding</strong>
+              <span>
+                Your access key verifies that you are authorized to join.
+              </span>
+            </div>
+          </div>
+        </aside>
+
+        <div className="admin-register-form-panel">
+          <div className="admin-form-heading">
+            <span className="admin-mobile-brand">
+              <ShieldCheck size={18} /> RetailEdge
+            </span>
+            <h2 id="register-title">Create admin account</h2>
+            <p>Enter your details to set up secure access.</p>
+          </div>
+
           {error && (
-            <div className="alert alert-danger text-center">{error}</div>
+            <div className="admin-alert admin-alert--error" role="alert">
+              {error}
+            </div>
           )}
-
           {message && (
-            <div className="alert alert-success text-center">{message}</div>
+            <div className="admin-alert admin-alert--success" role="status">
+              <CheckCircle2 size={18} />
+              {message}
+            </div>
           )}
 
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              className="form-control mb-3"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="Full Name"
-            />
+          <form className="admin-form" onSubmit={handleSubmit} noValidate>
+            <div className="admin-field">
+              <label htmlFor="admin-full-name">Full name</label>
+              <div className="admin-input-wrap">
+                <UserRound size={18} />
+                <input
+                  id="admin-full-name"
+                  type="text"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  placeholder="e.g. Karan Talekar"
+                  autoComplete="name"
+                />
+              </div>
+            </div>
 
-            <input
-              type="email"
-              className="form-control mb-3"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-            />
+            <div className="admin-field">
+              <label htmlFor="admin-email">Work email</label>
+              <div className="admin-input-wrap">
+                <Mail size={18} />
+                <input
+                  id="admin-email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="name@company.com"
+                  autoComplete="email"
+                />
+              </div>
+            </div>
 
-            <input
-              type="password"
-              className="form-control mb-3"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-            />
+            <div className="admin-field">
+              <label htmlFor="admin-password">Password</label>
+              <div className="admin-input-wrap">
+                <LockKeyhole size={18} />
+                <input
+                  id="admin-password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Minimum 8 characters"
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  className="admin-visibility"
+                  onClick={() => setShowPassword((value) => !value)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {formData.password && (
+                <div
+                  className="admin-strength"
+                  data-strength={passwordStrength}
+                >
+                  <div className="admin-strength__bars">
+                    {[1, 2, 3, 4].map((level) => (
+                      <span
+                        key={level}
+                        className={level <= passwordStrength ? "is-active" : ""}
+                      />
+                    ))}
+                  </div>
+                  <span>{strengthLabel}</span>
+                </div>
+              )}
+            </div>
 
-            <input
-              type="password"
-              className="form-control mb-3"
-              name="adminKey"
-              value={formData.adminKey}
-              onChange={handleChange}
-              placeholder="Admin Key"
-            />
+            <div className="admin-field">
+              <div className="admin-label-row">
+                <label htmlFor="admin-key">Admin access key</label>
+                <span>Provided by your organization</span>
+              </div>
+              <div className="admin-input-wrap">
+                <KeyRound size={18} />
+                <input
+                  id="admin-key"
+                  type={showAdminKey ? "text" : "password"}
+                  name="adminKey"
+                  value={formData.adminKey}
+                  onChange={handleChange}
+                  placeholder="Enter secure key"
+                  autoComplete="off"
+                />
+                <button
+                  type="button"
+                  className="admin-visibility"
+                  onClick={() => setShowAdminKey((value) => !value)}
+                  aria-label={
+                    showAdminKey ? "Hide admin key" : "Show admin key"
+                  }
+                >
+                  {showAdminKey ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
 
-            <button className="btn btn-dark w-100" disabled={loading}>
-              {loading ? "Registering..." : "Register Admin"}
+            <button className="admin-submit" type="submit" disabled={loading}>
+              {loading ? (
+                <>
+                  <span className="admin-spinner" />
+                  Creating account...
+                </>
+              ) : (
+                <>
+                  Create account <ArrowRight size={18} />
+                </>
+              )}
             </button>
           </form>
 
-          {/* LOGIN BUTTON */}
-          <div className="text-center mt-4">
-            <p className="mb-1 text-muted">Already have an account?</p>
-
-            <button
-              className="btn btn-outline-primary w-100"
-              onClick={() => navigate("/login")}
-            >
-              Go to Login
+          <p className="admin-login-link">
+            Already have an account?{" "}
+            <button type="button" onClick={() => navigate("/login")}>
+              Sign in
             </button>
-          </div>
+          </p>
+          <p className="admin-legal">
+            By creating an account, you agree to your organization&apos;s access
+            and security policies.
+          </p>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

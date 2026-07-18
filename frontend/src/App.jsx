@@ -36,7 +36,6 @@ function App() {
 
       <Routes>
         {/* 🟢 Public Routes */}
-        {/* <Route path="/" element={<Registration />} /> */}
         <Route path="/" element={<Dashboard />} />
         <Route path="/Login" element={<Login />} />
 

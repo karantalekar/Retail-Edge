@@ -54,53 +54,6 @@ export const register = async (req, res) => {
   }
 };
 
-// ─── Login
-// export const login = async (req, res) => {
-//   try {
-//     const { email, password, role } = req.body;
-
-//     // const user = await User.findOne({ email });
-//     const user = await User.findOne({ email }).select("+password");
-
-//     if (!user) {
-//       return res.status(400).json({ message: "Email not found." });
-//     }
-
-//     // Compare hashed password
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch) {
-//       return res.status(400).json({ message: "Incorrect password." });
-//     }
-
-//     // Role check (optional)
-//     if (role && user.role !== role.toLowerCase()) {
-//       return res.status(400).json({ message: "Role mismatch." });
-//     }
-
-//     // Generate JWT
-//     const token = jwt.sign(
-//       { id: user._id, email: user.email, role: user.role },
-//       process.env.JWT_KEY || "secret123",
-//       { expiresIn: "2h" },
-//     );
-
-//     res.status(200).json({
-//       message: "Login successful!",
-//       token,
-//       user: {
-//         id: user._id,
-//         fullname: user.fullname,
-//         email: user.email,
-//         role: user.role,
-//         userToken: user.userToken, // 🔥 include unique token
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Login Error:", error);
-//     res.status(500).json({ message: "Server error: " + error.message });
-//   }
-// };
-
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -176,7 +129,9 @@ export const requestPasswordReset = async (req, res) => {
     });
   } catch (error) {
     console.error("Password Reset Request Error:", error);
-    return res.status(500).json({ message: "Unable to submit recovery request." });
+    return res
+      .status(500)
+      .json({ message: "Unable to submit recovery request." });
   }
 };
 
