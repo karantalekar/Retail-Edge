@@ -2,24 +2,24 @@
 
 <p align="center">
 
-<img src="assets/dashboard.png" alt="RetailEdge animated product demo" width="100%">{=html}
+<img src="assets/dashboard.png" alt="RetailEdge animated product demo" width="100%">
 
 </p>
 
 <p align="center">
 
 <b>{=html}One workspace for inventory, billing, staff, analytics, and
-retail operations.</b>{=html}
+retail operations.</b>
 
 </p>
 
 <p align="center">
 
-<a href="#-features">{=html}Features</a>{=html} •
-<a href="#-modules">{=html}Modules</a>{=html} •
-<a href="#-tech-stack">{=html}Tech Stack</a>{=html} •
-<a href="#-screenshots">{=html}Screenshots</a>{=html} •
-<a href="#-installation">{=html}Installation</a>{=html}
+<a href="#-features">Features</a> •
+<a href="#-modules">Modules</a> •
+<a href="#-tech-stack">Tech Stack</a> •
+<a href="#-screenshots">Screenshots</a> •
+<a href="#-installation">Installation</a>
 
 </p>
 
