@@ -2,7 +2,7 @@
 
 <p align="center">
 
-<img src="./retail-edge-demo.gif" alt="RetailEdge animated product demo" width="100%">{=html}
+<img src="assets/dashboard.png" alt="RetailEdge animated product demo" width="100%">{=html}
 
 </p>
 
@@ -182,19 +182,19 @@ revenue, orders, stock alerts, and inventory health.
 
 Add your dashboard screenshot here:
 
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](assets/dashboard.png)
 
 📦 Inventory Management
 
 Add your inventory screenshot here:
 
-![Inventory](./screenshots/inventory.png)
+![Inventory](assets/inventory.png)
 
 🧾 Order Management
 
 Add your orders screenshot here:
 
-![Orders](./screenshots/orders.png)
+![Orders](assets/orders.png)
 
 🚀 Installation
 
