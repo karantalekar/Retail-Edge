@@ -1,55 +1,3 @@
-// import User from "../models/Users.js";
-
-// // ─── Get All Staff ─────────────────────────────────────────────────────────
-// export const getStaff = async (req, res) => {
-//   try {
-//     const staff = await User.find({ role: "staff" });
-//     res.status(200).json(staff);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// // ─── Approve (Activate) Staff ──────────────────────────────────────────────
-// export const approveStaff = async (req, res) => {
-//   try {
-//     const staff = await User.findById(req.params.id);
-//     if (!staff) return res.status(404).json({ message: "Staff not found" });
-
-//     staff.approved = true;
-//     await staff.save();
-//     res.status(200).json({ message: "Staff approved", staff });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// // ─── Deactivate Staff ──────────────────────────────────────────────────────
-// export const deactivateStaff = async (req, res) => {
-//   try {
-//     const staff = await User.findById(req.params.id);
-//     if (!staff) return res.status(404).json({ message: "Staff not found" });
-
-//     staff.approved = false;
-//     await staff.save();
-//     res.status(200).json({ message: "Staff deactivated", staff });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// // ─── Delete Staff ──────────────────────────────────────────────────────────
-// export const deleteStaff = async (req, res) => {
-//   try {
-//     const staff = await User.findByIdAndDelete(req.params.id);
-//     if (!staff) return res.status(404).json({ message: "Staff not found" });
-
-//     res.status(200).json({ message: "Staff deleted successfully" });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
 import User from "../models/Users.js";
 import bcrypt from "bcryptjs";
 
@@ -203,11 +151,14 @@ export const resetStaffPassword = async (req, res) => {
       });
     }
 
-    const staff = await User.findOne({ _id: req.params.id, role: "staff" }).select(
-      "+password",
-    );
+    const staff = await User.findOne({
+      _id: req.params.id,
+      role: "staff",
+    }).select("+password");
     if (!staff) {
-      return res.status(404).json({ success: false, message: "Staff not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Staff not found" });
     }
 
     staff.password = await bcrypt.hash(password, 10);
