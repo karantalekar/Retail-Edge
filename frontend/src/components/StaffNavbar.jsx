@@ -43,7 +43,7 @@ const StaffNavbar = () => {
     localStorage.removeItem("token");
     setLogoutOpen(false);
     toast.success("Signed out successfully");
-    navigate("/Login");
+    navigate("/Login", { replace: true, state: { signedOut: true } });
   };
 
   const isActive = (path) => pathname.toLowerCase() === path.toLowerCase();

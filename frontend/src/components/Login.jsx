@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   FaArrowLeft,
@@ -15,6 +15,8 @@ import api from "../config/api";
 import "../style/Auth.css";
 
 const Login = () => {
+  const { state } = useLocation();
+  const signedOut = state?.signedOut === true;
   const [theme] = useState(
     () => localStorage.getItem("retailEdgeDashboardTheme") || "light",
   );
@@ -45,6 +47,8 @@ const Login = () => {
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+      setFormData({ email: "", password: "" });
+      setShowPassword(false);
       toast.success(response.data.message || "Welcome back");
       navigate(user.role?.toLowerCase() === "admin" ? "/Analytics" : "/Cart");
     } catch (error) {
@@ -117,7 +121,11 @@ const Login = () => {
             Enter your RetailEdge credentials to continue.
           </p>
 
-          <form onSubmit={handleSubmit} className="auth-form">
+          <form
+            onSubmit={handleSubmit}
+            className="auth-form"
+            autoComplete={signedOut ? "off" : "on"}
+          >
             <label>
               <span>Email address</span>
               <div className="auth-input">
@@ -128,7 +136,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="you@company.com"
-                  autoComplete="email"
+                  autoComplete={signedOut ? "off" : "username"}
                   required
                 />
               </div>
@@ -148,7 +156,7 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Enter your password"
-                  autoComplete="current-password"
+                  autoComplete={signedOut ? "new-password" : "current-password"}
                   required
                 />
                 <button

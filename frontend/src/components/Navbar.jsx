@@ -20,7 +20,7 @@ const Navbar = () => {
     localStorage.clear();
     setLogoutOpen(false);
     toast.success("Signed out successfully");
-    navigate("/Login");
+    navigate("/Login", { replace: true, state: { signedOut: true } });
   };
 
   return (
